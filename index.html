@@ -478,15 +478,15 @@
             const dates = ref(generateDates());
             const selectedDateIndex = ref(0); // 預設選中第一天
 
-            // 內建行程資料 (依照提供的五天示範格式，其餘可透過介面新增)
+           // 內建行程資料 (包含 5/22 - 5/31 全部行程)
             const itineraryData = ref({
-                0: [ // Day 1: 22/05/2026
+                0: [ // 第一日: 22/05/2026
                     { id: 1, type: 'flight', time: '10:35', endTime: '16:05', name: 'HKG -> NRT', from: 'HKG', to: 'NRT', flightNo: 'UO870', transportType: 'transit', transitTime: '-' },
                     { id: 2, type: 'transit', time: '17:48', name: '乘搭成田特快到橫濱', transportType: 'transit', transitTime: '1hr 43m' },
                     { id: 3, type: 'accommodation', time: '19:30', name: 'Check in Plumm飯店', transportType: 'walk', transitTime: '10m' },
                     { id: 4, type: 'food', time: '20:00', name: '晚餐時間', transportType: 'walk', transitTime: '5m' }
                 ],
-                1: [ // Day 2: 23/05/2026
+                1: [ // 第二日: 23/05/2026
                     { id: 5, type: 'transit', time: '09:00', name: '抵達「鎌倉站」', transportType: 'transit', transitTime: '45m (由Plumm飯店)' },
                     { id: 6, type: 'attraction', time: '09:15', name: '錢洗弁財天宇賀福神社', transportType: 'walk', transitTime: '15m' },
                     { id: 7, type: 'attraction', time: '10:45', name: '鶴岡八幡宮', transportType: 'walk', transitTime: '20m' },
@@ -497,7 +497,7 @@
                     { id: 12, type: 'attraction', time: '17:30', name: '龍戀之鐘 & 江之島燈塔', transportType: 'walk', transitTime: '10m' },
                     { id: 13, type: 'food', time: '20:15', name: '中華街 Dinner (橫濱)', transportType: 'transit', transitTime: '45m' }
                 ],
-                2: [ // Day 3: 24/05/2026
+                2: [ // 第三日: 24/05/2026
                     { id: 14, type: 'transit', time: '11:00', name: '到達熱海', transportType: 'transit', transitTime: '1h 20m (由橫濱)' },
                     { id: 15, type: 'accommodation', time: '11:30', name: '格蘭度假優雅熱海酒店 放行李', transportType: 'walk', transitTime: '15m' },
                     { id: 16, type: 'shopping', time: '11:45', name: '熱海站前「平和通商店街」', transportType: 'walk', transitTime: '10m' },
@@ -505,21 +505,55 @@
                     { id: 18, type: 'attraction', time: '16:30', name: '起雲閣', transportType: 'walk', transitTime: '15m' },
                     { id: 19, type: 'attraction', time: '20:20', name: '熱海海上花火大會', transportType: 'walk', transitTime: '10m' }
                 ],
-                3: [ // Day 4: 25/05/2026
+                3: [ // 第四日: 25/05/2026
                     { id: 20, type: 'transit', time: '09:50', name: '抵達伊東站', transportType: 'transit', transitTime: '30m' },
                     { id: 21, type: 'other', time: '10:00', name: 'Nippon Rent-A-Car 伊東站前店 取車', transportType: 'walk', transitTime: '5m' },
                     { id: 22, type: 'attraction', time: '10:30', name: '大室山', transportType: 'drive', transitTime: '25m' },
                     { id: 23, type: 'attraction', time: '14:15', name: '城ヶ崎海岸', transportType: 'drive', transitTime: '20m' },
                     { id: 24, type: 'accommodation', time: '16:00', name: '入住「望水日式旅館」', transportType: 'drive', transitTime: '30m' }
                 ],
-                4: [ // Day 5: 26/05/2026
+                4: [ // 第五日: 26/05/2026
                     { id: 25, type: 'attraction', time: '11:15', name: '三島 Skywalk', transportType: 'drive', transitTime: '1h 10m' },
                     { id: 26, type: 'other', time: '15:00', name: '小田原還車', transportType: 'drive', transitTime: '45m' },
                     { id: 27, type: 'attraction', time: '15:30', name: '小田原城 & 海鮮Tea', transportType: 'walk', transitTime: '10m' },
                     { id: 28, type: 'accommodation', time: '19:00', name: 'Check-in 季の湯 雪月花', transportType: 'transit', transitTime: '40m' }
                 ],
-                // 其餘天數初始化為空陣列
-                5: [], 6: [], 7: [], 8: [], 9: []
+                5: [ // 第六日: 27/05/2026
+                    { id: 29, type: 'transit', time: '08:45', name: '箱根登山纜車到「早雲山站」', transportType: 'transit', transitTime: '10m' },
+                    { id: 30, type: 'attraction', time: '10:00', name: '大涌谷導賞團', transportType: 'transit', transitTime: '20m' },
+                    { id: 31, type: 'food', time: '11:00', name: '大涌谷「黑雞蛋」', transportType: 'walk', transitTime: '5m' },
+                    { id: 32, type: 'food', time: '12:30', name: 'Lunch', transportType: 'walk', transitTime: '5m' },
+                    { id: 33, type: 'attraction', time: '13:30', name: '雕刻之森美術館', transportType: 'transit', transitTime: '25m' },
+                    { id: 34, type: 'transit', time: '15:30', name: '前往桃源台港', transportType: 'transit', transitTime: '30m' },
+                    { id: 35, type: 'attraction', time: '16:30', name: '箱根海賊船', transportType: 'transit', transitTime: '10m' },
+                    { id: 36, type: 'attraction', time: '17:30', name: '箱根神社 & 水中鳥居', transportType: 'walk', transitTime: '15m' },
+                    { id: 37, type: 'accommodation', time: '18:30', name: '回酒店 (季の湯 雪月花)', transportType: 'transit', transitTime: '30m' }
+                ],
+                6: [ // 第七日: 28/05/2026
+                    { id: 38, type: 'attraction', time: '10:00', name: '箱根神社 & 水中鳥居 (如果前一天已經天黑)', transportType: 'transit', transitTime: '30m' },
+                    { id: 39, type: 'transit', time: '11:00', name: '出發去御殿場Outlet', transportType: 'transit', transitTime: '1h' },
+                    { id: 40, type: 'food', time: '12:00', name: '御殿場Outlet Lunch', transportType: 'walk', transitTime: '5m' },
+                    { id: 41, type: 'shopping', time: '13:00', name: '御殿場Outlet 購物', transportType: 'walk', transitTime: '5m' },
+                    { id: 42, type: 'transit', time: '18:00', name: '離開御殿場Outlet', transportType: 'transit', transitTime: '5m' },
+                    { id: 43, type: 'accommodation', time: '20:00', name: '到達池袋 Check-in (太陽城王子大飯店)', transportType: 'transit', transitTime: '1h 45m' },
+                    { id: 44, type: 'food', time: '20:30', name: '池袋 Dinner', transportType: 'walk', transitTime: '10m' }
+                ],
+                7: [ // 第八日: 29/05/2026
+                    { id: 45, type: 'attraction', time: '10:00', name: '太陽城', transportType: 'walk', transitTime: '5m' },
+                    { id: 46, type: 'food', time: '13:00', name: '池袋沾麵 Lunch', transportType: 'walk', transitTime: '10m' },
+                    { id: 47, type: 'shopping', time: '14:30', name: 'Animate アニメイト池袋本店', transportType: 'walk', transitTime: '10m' },
+                    { id: 48, type: 'shopping', time: '17:00', name: '西武百貨／Loft/松本清', transportType: 'walk', transitTime: '15m' },
+                    { id: 49, type: 'food', time: '19:30', name: '燒肉 Dinner', transportType: 'walk', transitTime: '10m' },
+                    { id: 50, type: 'other', time: '21:30', name: '東京 Bar', transportType: 'walk', transitTime: '10m' },
+                    { id: 51, type: 'accommodation', time: '22:30', name: '回酒店／夾公仔', transportType: 'walk', transitTime: '10m' }
+                ],
+                8: [ // 第九日: 30/05/2026
+                    { id: 52, type: 'other', time: '09:00', name: '出發前寄行李', transportType: 'walk', transitTime: '5m' },
+                    { id: 53, type: 'transit', time: '22:00', name: '到達羽田機場第3航廈 & 領取行李', transportType: 'transit', transitTime: '1h 10m' }
+                ],
+                9: [ // 第十日: 31/05/2026 (回程)
+                    { id: 54, type: 'flight', time: '01:00', endTime: '04:40', name: 'HND -> HKG', from: 'HND', to: 'HKG', flightNo: 'UO623', transportType: 'transit', transitTime: '-' }
+                ]
             });
 
             const currentItinerary = computed(() => {
