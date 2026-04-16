@@ -6,7 +6,9 @@
     <title>Japan Trip 2026 | Tokyo & Seaside</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
     <script>
@@ -70,22 +72,13 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        /* 翻譯頁面全螢幕動畫 */
-        .fade-enter-active, .fade-leave-active {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .fade-enter-from, .fade-leave-to {
-            opacity: 0;
-            transform: translateY(10px);
-        }
     </style>
 </head>
 <body class="antialiased pb-20">
 
 <div id="app">
     <div class="relative w-full h-[250px]">
-        <img src="Banner1.png" alt="Tokyo Seaside Banner" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1542051812899-22444be021cb?auto=format&fit=crop&q=80'">
+        <img src="Banner.jpg" alt="Tokyo Seaside Banner" class="w-full h-full object-cover">
         
         <div class="arc-overlay"></div>
         
@@ -101,9 +94,6 @@
             </button>
             <button @click="currentTab = 'expenses'" :class="{'active': currentTab === 'expenses'}" class="nav-btn bg-white text-deep-sea w-10 h-10 rounded-full flex items-center justify-center shadow transition">
                 <i class="fas fa-yen-sign"></i>
-            </button>
-            <button @click="currentTab = 'translate'" :class="{'active': currentTab === 'translate'}" class="nav-btn bg-white text-deep-sea w-10 h-10 rounded-full flex items-center justify-center shadow transition">
-                <i class="fas fa-language"></i>
             </button>
         </div>
     </div>
@@ -122,15 +112,12 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-sm p-3 mb-4 flex items-center space-x-4 border border-sea-blue/20">
-                <div class="text-3xl" :class="getWeatherColor(currentWeather.condition)">
-                    <i :class="getWeatherIcon(currentWeather.condition)"></i>
+                <div class="text-sea-blue text-2xl">
+                    <i class="fas fa-cloud-sun"></i>
                 </div>
                 <div>
-                    <div class="text-sm font-bold text-deep-sea flex items-center gap-2">
-                        {{ currentWeather.location }}天氣 
-                        <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">{{ currentWeather.text }}</span>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-1">氣溫 {{ currentWeather.temp }}°C | 體感 {{ currentWeather.feels }}°C</div>
+                    <div class="text-sm font-bold text-deep-sea">靜岡/東京周邊天氣</div>
+                    <div class="text-xs text-gray-500">氣溫 22°C | 體感 24°C</div>
                 </div>
             </div>
 
@@ -200,6 +187,7 @@
                             <div v-if="item.note" class="bg-bg-blue p-2 rounded mt-1"><i class="fas fa-comment-dots w-4"></i> {{ item.note }}</div>
                         </div>
                     </div>
+
                 </template>
             </div>
 
@@ -209,6 +197,7 @@
         </div>
 
         <div v-show="currentTab === 'info'" class="space-y-6 pt-2 pb-10">
+            
             <div class="bg-white rounded-xl shadow-sm p-4">
                 <h3 class="font-bold border-b pb-2 mb-3"><i class="fas fa-exchange-alt mr-2 text-sea-blue"></i>匯率換算 (JPY to HKD)</h3>
                 <div class="flex items-center space-x-2">
@@ -255,7 +244,7 @@
             <div class="bg-white rounded-xl shadow-sm p-4">
                 <h3 class="font-bold border-b pb-2 mb-3"><i class="fas fa-bed mr-2 text-sea-blue"></i>住宿資訊</h3>
                 <div class="space-y-3">
-                    <div v-for="(hotel, index) in hotels" :key="index" class="text-sm bg-gray-50 p-2 rounded border border-gray-100">
+                    <div v-for="hotel in hotels" class="text-sm bg-gray-50 p-2 rounded">
                         <div class="font-bold text-deep-sea flex justify-between">
                             {{ hotel.name }}
                             <i class="fas fa-map-marker-alt text-sea-blue cursor-pointer" @click="openMap(hotel.name)"></i>
@@ -271,11 +260,11 @@
                     <div class="font-bold mb-1">Nippon Rent-a-car</div>
                     <div class="mb-2">
                         <span class="text-xs bg-gray-200 px-1 rounded">取車</span> 伊東站前店<br>
-                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openMap('Nippon Rent-a-car 伊東')"><i class="fas fa-location-arrow"></i> 導航</span>
+                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openMap('Nippon Rent-a-car Ito')"><i class="fas fa-location-arrow"></i> 導航</span>
                     </div>
                     <div>
                         <span class="text-xs bg-gray-200 px-1 rounded">還車</span> 小田原店<br>
-                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openMap('Nippon Rent-a-car 小田原')"><i class="fas fa-location-arrow"></i> 導航</span>
+                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openMap('Nippon Rent-a-car Odawara')"><i class="fas fa-location-arrow"></i> 導航</span>
                     </div>
                 </div>
             </div>
@@ -299,15 +288,12 @@
 
         <div v-show="currentTab === 'shopping'" class="pt-2 pb-20">
             <div class="grid grid-cols-2 gap-4">
-                <div v-for="(item, index) in shoppingList" :key="index" class="bg-white rounded-xl shadow-sm overflow-hidden relative border border-gray-100">
-                    <div class="w-full h-32 bg-gray-100 flex items-center justify-center">
-                        <img v-if="item.image" :src="item.image" class="w-full h-full object-cover" alt="shopping item">
-                        <i v-else class="fas fa-image text-gray-300 text-3xl"></i>
-                    </div>
+                <div v-for="(item, index) in shoppingList" :key="index" class="bg-white rounded-xl shadow-sm overflow-hidden relative">
+                    <img :src="item.image" class="w-full h-32 object-cover" alt="shopping item">
                     <div class="p-2">
-                        <div class="text-sm font-bold text-deep-sea truncate">{{ item.name }}</div>
+                        <div class="text-sm font-bold truncate">{{ item.name }}</div>
                     </div>
-                    <button @click="deleteShoppingItem(index)" class="absolute top-2 right-2 bg-black/40 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs backdrop-blur-sm">
+                    <button @click="deleteShoppingItem(index)" class="absolute top-2 right-2 bg-black/50 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -325,18 +311,18 @@
             </div>
 
             <div class="space-y-2">
-                <div v-for="(exp, index) in expenses" :key="index" class="bg-white p-3 rounded-xl shadow-sm flex items-center justify-between border border-gray-50">
+                <div v-for="(exp, index) in expenses" :key="index" class="bg-white p-3 rounded-xl shadow-sm flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-bg-blue flex items-center justify-center text-sea-blue">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-sea-blue">
                             <i :class="getCategoryIcon(exp.category)"></i>
                         </div>
                         <div>
-                            <div class="text-sm font-bold text-deep-sea">{{ exp.name }}</div>
+                            <div class="text-sm font-bold">{{ exp.name }}</div>
                             <div class="text-xs text-gray-500">{{ exp.date }} | {{ exp.payment }}</div>
                         </div>
                     </div>
-                    <div class="font-bold text-accent-orange">
-                        ¥ {{ exp.amount.toLocaleString() }}
+                    <div class="font-bold text-red-500">
+                        -¥{{ exp.amount }}
                     </div>
                 </div>
             </div>
@@ -344,32 +330,6 @@
             <button @click="showExpenseModal = true" class="fixed bottom-6 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-lg flex items-center justify-center text-2xl z-50 hover:bg-sea-blue transition">
                 <i class="fas fa-plus"></i>
             </button>
-        </div>
-
-        <div v-show="currentTab === 'translate'" class="pt-2 pb-20">
-            <a href="intent://#Intent;package=com.google.android.googlequicksearchbox;scheme=https;S.browser_fallback_url=https://lens.google.com;end;" target="_blank" 
-               class="bg-white rounded-xl shadow-sm p-4 mb-5 flex items-center justify-between border-l-4 border-accent-orange hover:shadow-md transition block">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-orange-50 text-accent-orange w-10 h-10 rounded-full flex items-center justify-center text-xl">
-                        <i class="fas fa-camera"></i>
-                    </div>
-                    <div>
-                        <div class="font-bold text-deep-sea">Google 智慧鏡頭</div>
-                        <div class="text-xs text-gray-500">拍照翻譯菜單或招牌</div>
-                    </div>
-                </div>
-                <i class="fas fa-chevron-right text-gray-300"></i>
-            </a>
-
-            <div class="space-y-3">
-                <div class="text-sm font-bold text-deep-sea mb-2 border-b border-sea-blue/20 pb-1">常用簡單對話</div>
-                <div v-for="(phrase, index) in phrases" :key="index" 
-                     @click="selectedTranslation = phrase" 
-                     class="bg-white rounded-xl shadow-sm p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition border border-gray-100">
-                    <span class="font-medium text-sm text-deep-sea">{{ phrase.tw }}</span>
-                    <i class="fas fa-language text-sea-blue opacity-50 text-lg"></i>
-                </div>
-            </div>
         </div>
 
     </div>
@@ -416,7 +376,7 @@
                     <textarea v-model="currentForm.note" class="w-full border rounded p-2 h-20"></textarea>
                 </div>
                 <div>
-                    <label class="text-xs text-gray-500">前往此處的交通方式</label>
+                    <label class="text-xs text-gray-500">前往此處的交通方式 (從上一站)</label>
                     <select v-model="currentForm.transportType" class="w-full border rounded p-2 bg-white">
                         <option value="walk">步行</option>
                         <option value="drive">開車</option>
@@ -424,9 +384,9 @@
                     </select>
                 </div>
             </div>
-            <div class="mt-6 flex justify-between items-center">
-                <button v-if="isEditMode" @click="confirmDeleteItinerary" class="text-red-500 font-bold px-3 py-2 hover:bg-red-50 rounded text-sm"><i class="fas fa-trash-alt mr-1"></i>刪除</button>
-                <div v-else></div> <div class="flex space-x-2">
+            <div class="mt-6 flex justify-between">
+                <button v-if="isEditMode" @click="confirmDeleteItinerary" class="text-red-500 font-bold px-4 py-2 hover:bg-red-50 rounded">刪除</button>
+                <div class="flex space-x-2 ml-auto">
                     <button @click="showItineraryModal = false" class="px-4 py-2 border rounded text-gray-500">取消</button>
                     <button @click="saveItinerary" class="px-4 py-2 bg-deep-sea text-white rounded">儲存</button>
                 </div>
@@ -443,7 +403,7 @@
                     <input type="text" v-model="newShoppingItem.name" class="w-full border rounded p-2">
                 </div>
                 <div>
-                    <label class="text-xs text-gray-500">圖片網址 (選填)</label>
+                    <label class="text-xs text-gray-500">圖片 (可輸入圖片網址或留白)</label>
                     <input type="text" v-model="newShoppingItem.image" placeholder="https://..." class="w-full border rounded p-2">
                 </div>
             </div>
@@ -482,7 +442,6 @@
                     <select v-model="newExpense.payment" class="w-full border rounded p-2 bg-white">
                         <option value="現金">現金</option>
                         <option value="信用卡">信用卡</option>
-                        <option value="ICOCA">ICOCA/Suica</option>
                     </select>
                 </div>
             </div>
@@ -493,20 +452,6 @@
         </div>
     </div>
 
-    <transition name="fade">
-        <div v-if="selectedTranslation" class="fixed inset-0 bg-deep-sea z-[100] flex flex-col items-center justify-center p-6 text-center">
-            <button @click="selectedTranslation = null" class="absolute top-10 left-6 text-white text-3xl">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <div class="text-white/20 text-7xl mb-6"><i class="far fa-comments"></i></div>
-            <h2 class="text-white text-2xl font-bold mb-8 leading-relaxed">{{ selectedTranslation.tw }}</h2>
-            <div class="bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl">
-                <div class="text-deep-sea font-bold text-3xl mb-4">{{ selectedTranslation.jp }}</div>
-                <div class="text-gray-400 text-sm tracking-widest font-medium">{{ selectedTranslation.romaji }}</div>
-            </div>
-        </div>
-    </transition>
-
 </div>
 
 <script>
@@ -516,12 +461,12 @@
         setup() {
             const currentTab = ref('itinerary');
             
-            // ============ 1. 日期與行程資料 ============
+            // 產生 5/22 - 5/31 的日期陣列
             const generateDates = () => {
                 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 let dateList = [];
                 for(let i = 22; i <= 31; i++) {
-                    let d = new Date(2026, 4, i); 
+                    let d = new Date(2026, 4, i); // Month is 0-indexed (4 = May)
                     dateList.push({
                         dayOfWeek: days[d.getDay()],
                         displayDate: `${i}`,
@@ -531,47 +476,18 @@
                 return dateList;
             };
             const dates = ref(generateDates());
-            const selectedDateIndex = ref(0);
+            const selectedDateIndex = ref(0); // 預設選中第一天
 
-            // ==================== 天氣模擬系統 ====================
-            const weatherMap = {
-                0: { condition: 'sunny', temp: 22, feels: 24, text: '晴天', location: '東京/橫濱' },
-                1: { condition: 'cloudy', temp: 20, feels: 22, text: '多雲', location: '鎌倉/橫濱' },
-                2: { condition: 'rainy', temp: 19, feels: 20, text: '雨天', location: '熱海' },
-                3: { condition: 'sunny', temp: 23, feels: 25, text: '晴天', location: '伊豆/城崎' },
-                4: { condition: 'cloudy', temp: 18, feels: 19, text: '多雲', location: '箱根' },
-                5: { condition: 'sunny', temp: 17, feels: 18, text: '晴天', location: '大涌谷/蘆之湖' },
-                6: { condition: 'cloudy', temp: 21, feels: 22, text: '多雲', location: '御殿場/東京' },
-                7: { condition: 'rainy', temp: 20, feels: 21, text: '陣雨', location: '東京(池袋)' },
-                8: { condition: 'sunny', temp: 24, feels: 25, text: '晴天', location: '東京' },
-                9: { condition: 'cloudy', temp: 22, feels: 23, text: '多雲', location: '羽田/香港' }
-            };
-            const currentWeather = computed(() => weatherMap[selectedDateIndex.value]);
-            
-            const getWeatherIcon = (condition) => {
-                if (condition === 'sunny') return 'fas fa-sun';
-                if (condition === 'cloudy') return 'fas fa-cloud';
-                if (condition === 'rainy') return 'fas fa-cloud-showers-heavy';
-                return 'fas fa-cloud-sun';
-            };
-            const getWeatherColor = (condition) => {
-                if (condition === 'sunny') return 'text-accent-orange';
-                if (condition === 'cloudy') return 'text-gray-400';
-                if (condition === 'rainy') return 'text-blue-400';
-                return 'text-sea-blue';
-            };
-
-            // ==================== 行程資料庫 (新增每日飯店出發) ====================
+            // 內建行程資料 (包含 5/22 - 5/31 全部行程)
             const itineraryData = ref({
-                0: [ 
+                0: [ // 第一日: 22/05/2026
                     { id: 1, type: 'flight', time: '10:35', endTime: '16:05', name: 'HKG -> NRT', from: 'HKG', to: 'NRT', flightNo: 'UO870', transportType: 'transit', transitTime: '-' },
                     { id: 2, type: 'transit', time: '17:48', name: '乘搭成田特快到橫濱', transportType: 'transit', transitTime: '1hr 43m' },
                     { id: 3, type: 'accommodation', time: '19:30', name: 'Check in Plumm飯店', transportType: 'walk', transitTime: '10m' },
                     { id: 4, type: 'food', time: '20:00', name: '晚餐時間', transportType: 'walk', transitTime: '5m' }
                 ],
-                1: [ 
-                    { id: 901, type: 'accommodation', time: '08:15', name: '從飯店出發 (Plumm飯店)', transportType: 'walk', transitTime: '-' },
-                    { id: 5, type: 'transit', time: '09:00', name: '抵達「鎌倉站」', transportType: 'transit', transitTime: '45m' },
+                1: [ // 第二日: 23/05/2026
+                    { id: 5, type: 'transit', time: '09:00', name: '抵達「鎌倉站」', transportType: 'transit', transitTime: '45m (由Plumm飯店)' },
                     { id: 6, type: 'attraction', time: '09:15', name: '錢洗弁財天宇賀福神社', transportType: 'walk', transitTime: '15m' },
                     { id: 7, type: 'attraction', time: '10:45', name: '鶴岡八幡宮', transportType: 'walk', transitTime: '20m' },
                     { id: 8, type: 'food', time: '11:30', name: '小町通 Lunch', transportType: 'walk', transitTime: '5m' },
@@ -581,32 +497,28 @@
                     { id: 12, type: 'attraction', time: '17:30', name: '龍戀之鐘 & 江之島燈塔', transportType: 'walk', transitTime: '10m' },
                     { id: 13, type: 'food', time: '20:15', name: '中華街 Dinner (橫濱)', transportType: 'transit', transitTime: '45m' }
                 ],
-                2: [ 
-                    { id: 902, type: 'accommodation', time: '09:40', name: '從飯店出發 (Plumm飯店)', transportType: 'walk', transitTime: '-' },
-                    { id: 14, type: 'transit', time: '11:00', name: '到達熱海', transportType: 'transit', transitTime: '1h 20m' },
+                2: [ // 第三日: 24/05/2026
+                    { id: 14, type: 'transit', time: '11:00', name: '到達熱海', transportType: 'transit', transitTime: '1h 20m (由橫濱)' },
                     { id: 15, type: 'accommodation', time: '11:30', name: '格蘭度假優雅熱海酒店 放行李', transportType: 'walk', transitTime: '15m' },
                     { id: 16, type: 'shopping', time: '11:45', name: '熱海站前「平和通商店街」', transportType: 'walk', transitTime: '10m' },
                     { id: 17, type: 'attraction', time: '15:00', name: '來宮神社', transportType: 'walk', transitTime: '15m' },
                     { id: 18, type: 'attraction', time: '16:30', name: '起雲閣', transportType: 'walk', transitTime: '15m' },
                     { id: 19, type: 'attraction', time: '20:20', name: '熱海海上花火大會', transportType: 'walk', transitTime: '10m' }
                 ],
-                3: [ 
-                    { id: 903, type: 'accommodation', time: '08:50', name: '從飯店出發 (格蘭度假優雅熱海酒店)', transportType: 'walk', transitTime: '-' },
+                3: [ // 第四日: 25/05/2026
                     { id: 20, type: 'transit', time: '09:50', name: '抵達伊東站', transportType: 'transit', transitTime: '30m' },
                     { id: 21, type: 'other', time: '10:00', name: 'Nippon Rent-A-Car 伊東站前店 取車', transportType: 'walk', transitTime: '5m' },
                     { id: 22, type: 'attraction', time: '10:30', name: '大室山', transportType: 'drive', transitTime: '25m' },
                     { id: 23, type: 'attraction', time: '14:15', name: '城ヶ崎海岸', transportType: 'drive', transitTime: '20m' },
                     { id: 24, type: 'accommodation', time: '16:00', name: '入住「望水日式旅館」', transportType: 'drive', transitTime: '30m' }
                 ],
-                4: [ 
-                    { id: 904, type: 'accommodation', time: '10:00', name: 'Check-out 望水日式旅館', transportType: 'drive', transitTime: '-' },
+                4: [ // 第五日: 26/05/2026
                     { id: 25, type: 'attraction', time: '11:15', name: '三島 Skywalk', transportType: 'drive', transitTime: '1h 10m' },
                     { id: 26, type: 'other', time: '15:00', name: '小田原還車', transportType: 'drive', transitTime: '45m' },
                     { id: 27, type: 'attraction', time: '15:30', name: '小田原城 & 海鮮Tea', transportType: 'walk', transitTime: '10m' },
                     { id: 28, type: 'accommodation', time: '19:00', name: 'Check-in 季の湯 雪月花', transportType: 'transit', transitTime: '40m' }
                 ],
-                5: [ 
-                    { id: 905, type: 'accommodation', time: '08:35', name: '從飯店出發 (季の湯 雪月花)', transportType: 'walk', transitTime: '-' },
+                5: [ // 第六日: 27/05/2026
                     { id: 29, type: 'transit', time: '08:45', name: '箱根登山纜車到「早雲山站」', transportType: 'transit', transitTime: '10m' },
                     { id: 30, type: 'attraction', time: '10:00', name: '大涌谷導賞團', transportType: 'transit', transitTime: '20m' },
                     { id: 31, type: 'food', time: '11:00', name: '大涌谷「黑雞蛋」', transportType: 'walk', transitTime: '5m' },
@@ -617,9 +529,8 @@
                     { id: 36, type: 'attraction', time: '17:30', name: '箱根神社 & 水中鳥居', transportType: 'walk', transitTime: '15m' },
                     { id: 37, type: 'accommodation', time: '18:30', name: '回酒店 (季の湯 雪月花)', transportType: 'transit', transitTime: '30m' }
                 ],
-                6: [ 
-                    { id: 906, type: 'accommodation', time: '09:30', name: '從飯店出發 (季の湯 雪月花)', transportType: 'transit', transitTime: '-' },
-                    { id: 38, type: 'attraction', time: '10:00', name: '箱根神社 & 水中鳥居 (視情況)', transportType: 'transit', transitTime: '30m' },
+                6: [ // 第七日: 28/05/2026
+                    { id: 38, type: 'attraction', time: '10:00', name: '箱根神社 & 水中鳥居 (如果前一天已經天黑)', transportType: 'transit', transitTime: '30m' },
                     { id: 39, type: 'transit', time: '11:00', name: '出發去御殿場Outlet', transportType: 'transit', transitTime: '1h' },
                     { id: 40, type: 'food', time: '12:00', name: '御殿場Outlet Lunch', transportType: 'walk', transitTime: '5m' },
                     { id: 41, type: 'shopping', time: '13:00', name: '御殿場Outlet 購物', transportType: 'walk', transitTime: '5m' },
@@ -627,8 +538,7 @@
                     { id: 43, type: 'accommodation', time: '20:00', name: '到達池袋 Check-in (太陽城王子大飯店)', transportType: 'transit', transitTime: '1h 45m' },
                     { id: 44, type: 'food', time: '20:30', name: '池袋 Dinner', transportType: 'walk', transitTime: '10m' }
                 ],
-                7: [ 
-                    { id: 907, type: 'accommodation', time: '09:55', name: '從飯店出發 (太陽城王子大飯店)', transportType: 'walk', transitTime: '-' },
+                7: [ // 第八日: 29/05/2026
                     { id: 45, type: 'attraction', time: '10:00', name: '太陽城', transportType: 'walk', transitTime: '5m' },
                     { id: 46, type: 'food', time: '13:00', name: '池袋沾麵 Lunch', transportType: 'walk', transitTime: '10m' },
                     { id: 47, type: 'shopping', time: '14:30', name: 'Animate アニメイト池袋本店', transportType: 'walk', transitTime: '10m' },
@@ -637,19 +547,20 @@
                     { id: 50, type: 'other', time: '21:30', name: '東京 Bar', transportType: 'walk', transitTime: '10m' },
                     { id: 51, type: 'accommodation', time: '22:30', name: '回酒店／夾公仔', transportType: 'walk', transitTime: '10m' }
                 ],
-                8: [ 
-                    { id: 908, type: 'accommodation', time: '08:55', name: 'Check-out (太陽城王子大飯店)', transportType: 'walk', transitTime: '-' },
+                8: [ // 第九日: 30/05/2026
                     { id: 52, type: 'other', time: '09:00', name: '出發前寄行李', transportType: 'walk', transitTime: '5m' },
                     { id: 53, type: 'transit', time: '22:00', name: '到達羽田機場第3航廈 & 領取行李', transportType: 'transit', transitTime: '1h 10m' }
                 ],
-                9: [ 
+                9: [ // 第十日: 31/05/2026 (回程)
                     { id: 54, type: 'flight', time: '01:00', endTime: '04:40', name: 'HND -> HKG', from: 'HND', to: 'HKG', flightNo: 'UO623', transportType: 'transit', transitTime: '-' }
                 ]
             });
 
-            const currentItinerary = computed(() => itineraryData.value[selectedDateIndex.value] || []);
+            const currentItinerary = computed(() => {
+                return itineraryData.value[selectedDateIndex.value] || [];
+            });
 
-            // 拖曳排序
+            // 拖曳排序邏輯 (HTML5 Drag and Drop)
             const draggedItemIndex = ref(null);
             const onDragStart = (event, index) => {
                 draggedItemIndex.value = index;
@@ -662,7 +573,7 @@
                 draggedItemIndex.value = null;
             };
 
-            // 行程 Modal
+            // Modal 狀態
             const showItineraryModal = ref(false);
             const isEditMode = ref(false);
             const currentForm = ref({});
@@ -680,36 +591,33 @@
             };
 
             const saveItinerary = () => {
-                if(!currentForm.value.name) return;
-                const list = itineraryData.value[selectedDateIndex.value];
                 if(isEditMode.value) {
-                    const index = list.findIndex(i => i.id === currentForm.value.id);
-                    if(index !== -1) list[index] = { ...currentForm.value };
+                    const index = itineraryData.value[selectedDateIndex.value].findIndex(i => i.id === currentForm.value.id);
+                    if(index !== -1) itineraryData.value[selectedDateIndex.value][index] = { ...currentForm.value };
                 } else {
                     currentForm.value.id = Date.now();
-                    list.push({ ...currentForm.value });
+                    itineraryData.value[selectedDateIndex.value].push({ ...currentForm.value });
                     // 自動按時間排序
-                    list.sort((a, b) => a.time.localeCompare(b.time));
+                    itineraryData.value[selectedDateIndex.value].sort((a, b) => a.time.localeCompare(b.time));
                 }
                 showItineraryModal.value = false;
             };
 
             const confirmDeleteItinerary = () => {
-                if(confirm('確定要刪除這個行程嗎？')) {
-                    const list = itineraryData.value[selectedDateIndex.value];
-                    const index = list.findIndex(i => i.id === currentForm.value.id);
-                    if(index !== -1) list.splice(index, 1);
+                if(confirm("確定要刪除這個行程嗎？")) {
+                    const index = itineraryData.value[selectedDateIndex.value].findIndex(i => i.id === currentForm.value.id);
+                    if(index !== -1) itineraryData.value[selectedDateIndex.value].splice(index, 1);
                     showItineraryModal.value = false;
                 }
             };
 
-            // ============ 2. Info Tab 邏輯 ============
+            // 資訊頁面資料
             const currencyInput = ref(10000);
             const currencyResult = ref(0);
             const calculateCurrency = () => {
-                currencyResult.value = (currencyInput.value * 0.049).toFixed(2); // 假設匯率 0.049
+                // 假設當前匯率 JPY to HKD 約為 0.052
+                currencyResult.value = (currencyInput.value * 0.052).toFixed(2);
             };
-            onMounted(() => calculateCurrency());
 
             const hotels = ref([
                 { name: 'Plumm飯店', dates: '22/05 - 24/05' },
@@ -719,93 +627,80 @@
                 { name: '太陽城王子大飯店', dates: '28/05 - 30/05' }
             ]);
 
-            // ============ 3. Shopping Tab ============
+            // 購物頁面邏輯
             const showShoppingModal = ref(false);
-            const shoppingList = ref([
-                { name: 'EVE 止痛藥', image: '' },
-                { name: 'New Balance 運動鞋', image: '' }
-            ]);
             const newShoppingItem = ref({ name: '', image: '' });
+            const shoppingList = ref([
+                { name: '休足時間', image: 'https://images.unsplash.com/photo-1611078041060-e883e47e5b61?auto=format&fit=crop&w=300&q=80' },
+                { name: '東京芭娜娜', image: 'https://images.unsplash.com/photo-1596450514735-11003b0d2d31?auto=format&fit=crop&w=300&q=80' }
+            ]);
             
             const addShoppingItem = () => {
-                if(newShoppingItem.value.name) {
-                    shoppingList.value.push({ ...newShoppingItem.value });
-                    newShoppingItem.value = { name: '', image: '' };
-                    showShoppingModal.value = false;
-                }
+                if(!newShoppingItem.value.image) newShoppingItem.value.image = 'https://via.placeholder.com/300x200?text=No+Image';
+                shoppingList.value.push({ ...newShoppingItem.value });
+                showShoppingModal.value = false;
+                newShoppingItem.value = { name: '', image: '' };
             };
             const deleteShoppingItem = (index) => {
                 shoppingList.value.splice(index, 1);
             };
 
-            // ============ 4. Expense Tab ============
+            // 花費頁面邏輯
             const showExpenseModal = ref(false);
+            const newExpense = ref({ category: 'food', name: '', amount: '', payment: '現金' });
             const expenses = ref([
-                { name: '成田特快車票', amount: 4000, category: 'transport', payment: '信用卡', date: '22/05' },
-                { name: '橫濱晚餐', amount: 3500, category: 'food', payment: '現金', date: '22/05' }
+                { category: 'transport', name: 'NEX 成田特快', amount: 4000, payment: '信用卡', date: '2026-05-22' },
+                { category: 'food', name: '晚餐', amount: 3500, payment: '現金', date: '2026-05-22' }
             ]);
-            const newExpense = ref({ name: '', amount: '', category: 'food', payment: '現金' });
             
-            const totalExpenses = computed(() => {
-                return expenses.value.reduce((sum, exp) => sum + Number(exp.amount), 0);
-            });
+            const totalExpenses = computed(() => expenses.value.reduce((sum, item) => sum + Number(item.amount), 0));
 
             const addExpense = () => {
-                if(newExpense.value.name && newExpense.value.amount) {
-                    const todayStr = dates.value[selectedDateIndex.value].displayDate + '/05';
-                    expenses.value.unshift({ ...newExpense.value, date: todayStr });
-                    newExpense.value = { name: '', amount: '', category: 'food', payment: '現金' };
-                    showExpenseModal.value = false;
-                }
+                const today = new Date().toISOString().split('T')[0];
+                expenses.value.unshift({ ...newExpense.value, date: today });
+                showExpenseModal.value = false;
+                newExpense.value = { category: 'food', name: '', amount: '', payment: '現金' };
             };
 
-            // ============ 5. Translate Tab (新增) ============
-            const selectedTranslation = ref(null);
-            const phrases = ref([
-                { tw: '請問這個多少錢？', jp: 'いくらですか？', romaji: 'Ikura desu ka?' },
-                { tw: '不好意思 / 請問一下', jp: 'すみません', romaji: 'Sumimasen' },
-                { tw: '我要一個這個', jp: 'これを一つください', romaji: 'Kore o hitotsu kudasai' },
-                { tw: '可以刷卡嗎？', jp: 'クレジットカードは使えますか？', romaji: 'Kurejitto kādo wa tsukaemasu ka?' },
-                { tw: '請問廁所在哪裡？', jp: 'トイレはどこですか？', romaji: 'Toire wa doko desu ka?' },
-                { tw: '謝謝', jp: 'ありがとうございます', romaji: 'Arigatō gozaimasu' },
-                { tw: '有會說中文/英文的人嗎？', jp: '中国語/英語を話せる人はいますか？', romaji: 'Chūgokugo/Eigo o hanaseru hito wa imasu ka?' },
-                { tw: '可以幫我拍照嗎？', jp: '写真を撮ってもらえませんか？', romaji: 'Shashin o totte moraemasen ka?' }
-            ]);
-
-            // ============ UI 輔助函數 ============
-            const getCategoryName = (type) => {
-                const map = { attraction: '景點', food: '美食', accommodation: '住宿', shopping: '購物', transit: '交通', other: '其他' };
-                return map[type] || '其他';
-            };
-            const getCategoryIcon = (type) => {
-                const map = { attraction: 'fas fa-camera', food: 'fas fa-utensils', accommodation: 'fas fa-bed', shopping: 'fas fa-shopping-bag', transit: 'fas fa-train', flight: 'fas fa-plane', ticket: 'fas fa-ticket-alt', other: 'fas fa-star' };
-                return map[type] || 'fas fa-star';
-            };
-            const getCategoryBg = (type) => {
-                const map = { attraction: 'bg-red-400', food: 'bg-orange-400', accommodation: 'bg-blue-400', shopping: 'bg-purple-400', transit: 'bg-gray-400', other: 'bg-teal-400' };
-                return map[type] || 'bg-sea-blue';
-            };
-            const getCategoryBorderColor = (type) => {
-                const map = { attraction: 'border-red-400', food: 'border-orange-400', accommodation: 'border-blue-400', shopping: 'border-purple-400', transit: 'border-gray-400', other: 'border-teal-400' };
-                return map[type] || 'border-sea-blue';
-            };
-            const getTransportIcon = (type) => {
-                const map = { walk: 'fas fa-walking', drive: 'fas fa-car', transit: 'fas fa-train' };
-                return map[type] || 'fas fa-subway';
-            };
+            // 輔助與 UI 方法
             const openMap = (query) => {
                 window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
             };
 
+            const getCategoryIcon = (type) => {
+                const map = { attraction: 'fa-camera', food: 'fa-utensils', accommodation: 'fa-bed', shopping: 'fa-shopping-bag', flight: 'fa-plane', other: 'fa-star', transport: 'fa-train', ticket: 'fa-ticket-alt' };
+                return `fas ${map[type] || 'fa-map-marker-alt'}`;
+            };
+            const getCategoryName = (type) => {
+                const map = { attraction: '景點', food: '美食', accommodation: '住宿', shopping: '購物', flight: '航班', other: '其他' };
+                return map[type] || '其他';
+            };
+            const getCategoryBg = (type) => {
+                const map = { attraction: 'bg-green-500', food: 'bg-orange-400', accommodation: 'bg-indigo-400', shopping: 'bg-pink-400', flight: 'bg-deep-sea', other: 'bg-gray-400' };
+                return map[type] || 'bg-sea-blue';
+            };
+            const getCategoryBorderColor = (type) => {
+                const map = { attraction: 'border-green-500', food: 'border-orange-400', accommodation: 'border-indigo-400', shopping: 'border-pink-400', flight: 'border-deep-sea', other: 'border-gray-400' };
+                return map[type] || 'border-sea-blue';
+            };
+            const getTransportIcon = (type) => {
+                if(type === 'walk') return 'fas fa-walking';
+                if(type === 'drive') return 'fas fa-car';
+                return 'fas fa-train';
+            };
+
+            onMounted(() => {
+                calculateCurrency();
+            });
+
             return {
-                currentTab, dates, selectedDateIndex, currentItinerary,
-                onDragStart, onDrop,
+                currentTab, dates, selectedDateIndex, itineraryData, currentItinerary,
                 showItineraryModal, isEditMode, currentForm, openItineraryModal, editItem, saveItinerary, confirmDeleteItinerary,
+                onDragStart, onDrop,
                 currencyInput, currencyResult, calculateCurrency, hotels,
-                showShoppingModal, shoppingList, newShoppingItem, addShoppingItem, deleteShoppingItem,
-                showExpenseModal, expenses, newExpense, totalExpenses, addExpense,
-                selectedTranslation, phrases, // 翻譯變數
-                getCategoryName, getCategoryIcon, getCategoryBg, getCategoryBorderColor, getTransportIcon, openMap
+                showShoppingModal, newShoppingItem, shoppingList, addShoppingItem, deleteShoppingItem,
+                showExpenseModal, newExpense, expenses, totalExpenses, addExpense,
+                openMap, getCategoryIcon, getCategoryName, getCategoryBg, getCategoryBorderColor, getTransportIcon
             };
         }
     }).mount('#app');
