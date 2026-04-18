@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -410,9 +410,9 @@
             const editIdx = ref(null);
 
             const tabs = [
-                { id: 'itinerary', icon: 'fa-solid fa-map-marker-alt' },
-                { id: 'info', icon: 'fa-solid fa-info-circle' },
-                { id: 'shopping', icon: 'fa-solid fa-shopping-basket' },
+                { id: 'itinerary', icon: 'fa-solid fa-location-dot' },
+                { id: 'info', icon: 'fa-solid a-circle-info' },
+                { id: 'shopping', icon: 'fa-solid fa-basket-shopping' },
                 { id: 'expenses', icon: 'fa-solid fa-yen-sign' },
                 { id: 'translate', icon: 'fa-solid fa-language' }
             ];
@@ -541,11 +541,30 @@
             // Helper Methods
             const openNav = (q) => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`, '_blank');
             const openGoogleLens = () => window.location.href = 'googleapp://googlelens';
-            
-            const getCatIcon = (cat) => ({ '景點': 'fa-camera', '住宿': 'fa-bed', '美食': 'fa-utensils', '購物': 'fa-shopping-bag', '航班': 'fa-plane' }[cat] || 'fa-map-pin');
-            const getCatColor = (cat) => ({ '景點': 'bg-green-500', '住宿': 'bg-indigo-500', '美食': 'bg-accent-orange', '購物': 'bg-pink-500', '航班': 'bg-deep-sea' }[cat] || 'bg-sea-blue');
-            const getTransportIcon = (t) => ({ walk: 'fa-walking', drive: 'fa-car', transit: 'fa-train' }[t] || 'fa-walking');
 
+            const getCategoryIcon = (type) => {
+                const map = { 
+                    attraction: 'fa-camera', 
+                    food: 'fa-utensils', 
+                    accommodation: 'fa-bed', 
+                    shopping: 'fa-bag-shopping', // 建議更新為 bag-shopping
+                    flight: 'fa-plane', 
+                    other: 'fa-star', 
+                    transport: 'fa-train', 
+                    ticket: 'fa-ticket' // 舊名 ticket-alt 改為 ticket
+                };
+            // 將前綴從 fas 改為 fa-solid
+                return `fa-solid ${map[type] || 'fa-location-dot'}`;
+            };
+
+            const getTransportIcon = (type) => {
+                if(type === 'walk') return 'fa-solid fa-person-walking'; // 舊名 walking 改為 person-walking
+                if(type === 'drive') return 'fa-solid fa-car';
+                return 'fa-solid fa-train';
+            };
+
+            const getCatColor = (cat) => ({ '景點': 'bg-green-500', '住宿': 'bg-indigo-500', '美食': 'bg-accent-orange', '購物': 'bg-pink-500', '航班': 'bg-deep-sea' }[cat] || 'bg-sea-blue');
+          
             onMounted(() => { convertToHKD(); });
 
             return {
