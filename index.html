@@ -386,65 +386,18 @@
             ];
 
             // 原始資料結構轉換為 Ref 使其具備響應式 (可編輯/刪除/拖曳)
-            const itineraryData = {
+            const itineraryData = ref({
                 0: [
                     { id: 101, type: 'flight', time: '10:35', name: 'HKG -> NRT', flightNo: 'UO870', transportType: 'flight' },
-                    { id: 102, type: 'transit', time: '17:48', name: 'NEX 成田特快 to 橫濱', transportType: 'transit', transitTime: '1hr 43m' },
+                    { id: 102, type: 'transit', time: '17:48', name: 'NEX 成田特快 to 橫濱', transportType: 'transit', transitTime: '1h 43m' },
                     { id: 103, type: 'accommodation', time: '19:30', name: 'Check in Plumm酒店', transportType: 'walk', transitTime: '10m' }
                 ],
                 1: [
-                    { id: 201, type: 'attraction', time: '09:15', name: '錢洗弁財天', transportType: 'transit', transitTime: '45m' },
+                    { id: 201, type: 'attraction', time: '09:15', name: '錢洗弁財天', transportType: 'transit', transitTime: '45m', hours: '08:00 - 16:30', ticket: '免費' },
                     { id: 202, type: 'attraction', time: '10:45', name: '鶴岡八幡宮', transportType: 'walk', transitTime: '20m' },
-                    { id: 203, type: 'food', time: '11:30', name: '小町通 Lunch', transportType: 'walk', transitTime: '5m' },
-                    { id: 204, type: 'attraction', time: '13:00', name: '高德院 (鎌倉大佛)', transportType: 'transit', transitTime: '15m' },
-                    { id: 205, type: 'attraction', time: '14:30', name: '長谷寺', transportType: 'walk', transitTime: '10m' },
-                    { id: 206, type: 'attraction', time: '16:00', name: '鎌倉高校前 (灌籃高手)', transportType: 'transit', transitTime: '20m' },
-                    { id: 207, type: 'food', time: '18:30', name: '橫濱 Dinner', transportType: 'transit', transitTime: '50m' }
-                ],
-                2: [
-                    { id: 301, type: 'transit', time: '10:00', name: '橫濱 to 熱海', transportType: 'transit', transitTime: '1hr 20m' },
-                    { id: 302, type: 'food', time: '11:30', name: '熱海 Lunch (海鮮丼)', transportType: 'walk', transitTime: '10m' },
-                    { id: 303, type: 'attraction', time: '13:30', name: '來宮神社', transportType: 'transit', transitTime: '15m' },
-                    { id: 304, type: 'attraction', time: '15:30', name: '熱海城 / 纜車', transportType: 'transit', transitTime: '20m' },
-                    { id: 305, type: 'accommodation', time: '18:00', name: 'Check in 熱海酒店 & 一泊二食', transportType: 'transit', transitTime: '15m' }
-                ],
-                3: [
-                    { id: 401, type: 'transit', time: '10:30', name: '熱海 to 伊東', transportType: 'transit', transitTime: '30m' },
-                    { id: 402, type: 'attraction', time: '11:30', name: '大室山 (纜車)', transportType: 'transit', transitTime: '40m' },
-                    { id: 403, type: 'attraction', time: '14:00', name: '城崎海岸 & 門脇吊橋', transportType: 'transit', transitTime: '30m' },
-                    { id: 404, type: 'accommodation', time: '17:00', name: 'Check in 望水', transportType: 'transit', transitTime: '45m' }
-                ],
-                4: [
-                    { id: 501, type: 'transit', time: '11:00', name: '北川 to 強羅 (箱根)', transportType: 'transit', transitTime: '2hr 30m' },
-                    { id: 502, type: 'accommodation', time: '14:30', name: 'Check in 雪月花', transportType: 'walk', transitTime: '5m' },
-                    { id: 503, type: 'attraction', time: '15:30', name: '箱根強羅公園', transportType: 'walk', transitTime: '10m' }
-                ],
-                5: [
-                    { id: 601, type: 'attraction', time: '10:00', name: '大涌谷', transportType: 'transit', transitTime: '30m' },
-                    { id: 602, type: 'attraction', time: '12:00', name: '蘆之湖 海盜船', transportType: 'transit', transitTime: '20m' },
-                    { id: 603, type: 'attraction', time: '14:00', name: '箱根神社 (水中鳥居)', transportType: 'walk', transitTime: '15m' }
-                ],
-                6: [
-                    { id: 701, type: 'attraction', time: '10:00', name: '雕刻之森美術館', transportType: 'transit', transitTime: '20m' },
-                    { id: 702, type: 'transit', time: '14:00', name: '箱根 to 東京 (池袋)', transportType: 'transit', transitTime: '2hr' },
-                    { id: 703, type: 'accommodation', time: '16:30', name: 'Check in 太陽城王子', transportType: 'walk', transitTime: '10m' }
-                ],
-                7: [
-                    { id: 801, type: 'attraction', time: '10:00', name: '築地場外市場', transportType: 'transit', transitTime: '40m' },
-                    { id: 802, type: 'attraction', time: '13:00', name: '淺草寺 / 仲見世通', transportType: 'transit', transitTime: '20m' },
-                    { id: 803, type: 'attraction', time: '16:00', name: 'SHIBUYA SKY (夕陽)', transportType: 'transit', transitTime: '35m' }
-                ],
-                8: [
-                    { id: 901, type: 'attraction', time: '10:00', name: '明治神宮', transportType: 'transit', transitTime: '30m' },
-                    { id: 902, type: 'shopping', time: '13:00', name: '原宿 / 表參道 Shopping', transportType: 'walk', transitTime: '10m' },
-                    { id: 903, type: 'shopping', time: '17:00', name: '新宿 / 池袋', transportType: 'transit', transitTime: '20m' }
-                ],
-                9: [
-                    { id: 1001, type: 'food', time: '11:00', name: '池袋 Last Lunch', transportType: 'walk' },
-                    { id: 1002, type: 'transit', time: '14:00', name: '池袋 to NRT (Skyliner)', transportType: 'transit', transitTime: '1hr 10m' },
-                    { id: 1003, type: 'flight', time: '18:15', name: 'NRT -> HKG', flightNo: 'UO651', transportType: 'flight' }
+                    { id: 203, type: 'food', time: '11:30', name: '小町通 Lunch', transportType: 'walk', transitTime: '5m', note: '想吃抹茶冰淇淋' }
                 ]
-            };
+            });
 
             // 確保每一天都初始化一個空陣列
             for (let i = 2; i <= 9; i++) {
