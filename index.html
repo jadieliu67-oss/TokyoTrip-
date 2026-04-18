@@ -446,9 +446,9 @@
                 { week: 'Tue', dayNum: '26', date: '2026/05/26', loc: '三島' },
                 { week: 'Wed', dayNum: '27', date: '2026/05/27', loc: '箱根' },
                 { week: 'Thu', dayNum: '28', date: '2026/05/28', loc: '御殿場' },
-                { week: 'Fri', dayNum: '29', date: '2026/05/29', loc: '池袋' },
+                { week: 'Fri', dayNum: '29', date: '2026/05/29', loc: '東京' },
                 { week: 'Sat', dayNum: '30', date: '2026/05/30', loc: '東京' },
-                { week: 'Sun', dayNum: '31', date: '2026/05/31', loc: '羽田' }
+                { week: 'Sun', dayNum: '31', date: '2026/05/31', loc: '東京' }
             ];
 
             // 整合後的行程數據 (來自 index 1)
@@ -588,10 +588,11 @@
                     '鎌倉': { icon: 'sun', temp: 21, feel: 23 },
                     '熱海': { icon: 'cloud-sun', temp: 25, feel: 27 },
                     '伊豆': { icon: 'cloud', temp: 20, feel: 19 },
+                    '三島': { icon: 'sun', temp: 23, feel: 25 },
                     '箱根': { icon: 'cloud-showers-heavy', temp: 18, feel: 17 },
                     '東京': { icon: 'sun', temp: 24, feel: 26 }
                 };
-                return base[loc] || base['Tokyo'];
+                return base[loc] || base['東京'];
             });
 
             const getWeatherIcon = () => `fa-solid fa-${mockWeather.value.icon}`;
