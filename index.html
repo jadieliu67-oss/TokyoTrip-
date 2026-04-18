@@ -41,11 +41,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 頁首圓弧銜接 */
-        .header-arc {
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-        }
 
         .content-up {
             margin-top: -40px;
@@ -665,10 +660,10 @@
                 return styles[c] || 'bg-sea-blue';
             };
 
-            const getTransportIcon = (t) => {
-                return t === 'drive' ? 'fa-solid fa-car' : 
-                       t === 'walk' ? 'fa-solid fa-person-walking' : 
-                       'fa-solid fa-train-subway';
+            const getTransportIcon = (type) => {
+                if(type === 'walk') return 'fas fa-walking';
+                if(type === 'drive') return 'fas fa-car';
+                return 'fas fa-train';
             };
 
             return {
