@@ -205,30 +205,31 @@
         </div>
     </div>
 
-                    <div v-if="item.category === '航班'" class="bg-gradient-to-br from-deep-sea to-sea-blue p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden">
-                        <div class="flex justify-between items-start mb-6">
-                            <span class="bg-white/20 backdrop-blur text-[10px] px-3 py-1 rounded-full font-bold">FLIGHT INFO</span>
-                            <span class="text-2xl font-black tracking-tighter">{{ item.time }}</span>
-                        </div>
-                        <div class="flex justify-between items-center relative z-10">
-                            <div class="text-center">
-                                <h2 class="text-3xl font-black">HKG</h2>
-                                <p class="text-[10px] opacity-60">Hong Kong</p>
-                            </div>
-                            <div class="flex-1 px-4 flex flex-col items-center">
-                                <span class="text-[10px] font-medium mb-1">{{ item.name }}</span>
-                                <div class="w-full h-[1px] bg-white/30 relative">
-                                    <i class="fa-solid fa-plane absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs"></i>
-                                </div>
-                                <span class="text-[10px] mt-1 opacity-60">Approx. 4h 30m</span>
-                            </div>
-                            <div class="text-center">
-                                <h2 class="text-3xl font-black">{{ item.arrivalCode || 'NRT' }}</h2>
-                                <p class="text-[10px] opacity-60">{{ item.arrivalName || 'Narita' }}</p>
-                            </div>
-                        </div>
-                        <i class="fa-solid fa-plane-departure absolute -right-6 -bottom-6 text-8xl opacity-10 rotate-12"></i>
+                    <div v-if="idx === 0 && item.category === '航班' && selectedDateIdx === 0" 
+             class="bg-gradient-to-br from-deep-sea to-sea-blue p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden mb-6">
+            <div class="flex justify-between items-start mb-6">
+                <span class="bg-white/20 backdrop-blur text-[10px] px-3 py-1 rounded-full font-bold">FLIGHT INFO</span>
+                <span class="text-2xl font-black tracking-tighter">{{ item.time }}</span>
+            </div>
+            <div class="flex justify-between items-center relative z-10">
+                <div class="text-center">
+                    <h2 class="text-3xl font-black">HKG</h2>
+                    <p class="text-[10px] opacity-60">Hong Kong</p>
+                </div>
+                <div class="flex-1 px-4 flex flex-col items-center">
+                    <span class="text-[10px] font-medium mb-1">{{ item.name }}</span>
+                    <div class="w-full h-[1px] bg-white/30 relative">
+                        <i class="fa-solid fa-plane absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs"></i>
                     </div>
+                    <span class="text-[10px] mt-1 opacity-60">Approx. 4h 30m</span>
+                </div>
+                <div class="text-center">
+                    <h2 class="text-3xl font-black">{{ item.arrivalCode || 'NRT' }}</h2>
+                    <p class="text-[10px] opacity-60">{{ item.arrivalName || 'Tokyo' }}</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-plane-departure absolute -right-6 -bottom-6 text-9xl opacity-10 rotate-12"></i>
+        </div>
 
                     <div v-else @click="editItem(item, idx)" class="bg-white p-4 rounded-[24px] shadow-sm border border-gray-50 flex items-start space-x-4 btn-interact">
                         <div :class="['w-12 h-12 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-inner', getCatStyle(item.category)]">
@@ -638,10 +639,37 @@
             // 工具函式
             const openGoogleMap = (q) => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`, '_blank');
             const launchLens = () => window.location.href = 'googleapp://googlelens';
-            
-            const getCatIcon = (c) => ({ '景點': 'fa-solid fa-camera', '住宿': 'fa-solid fa-bed', '美食': 'fa-solid fa-utensils', '購物': 'fa-solid fa-bag-shopping', '航班': 'fa-solid fa-plane' }[c] || 'fa-solid fa-location-dot');
-            const getCatStyle = (c) => ({ '景點': 'bg-green-500', '住宿': 'bg-indigo-500', '美食': 'bg-accent-orange', '購物': 'bg-pink-500', '航班': 'bg-deep-sea' }[c] || 'bg-sea-blue');
-            const getTransportIcon = (t) => ({ walk: 'fa-solid fa-person-walking', drive: 'fa-solid fa-car', transit: 'fa-solid fa-train-subway' }[t] || 'fa-solid fa-person-walking');
+
+            // 在 setup 內定義
+            const getCatIcon = (c) => {
+                const icons = {
+                    '航班': 'fa-solid fa-plane',
+                    '景點': 'fa-solid fa-camera',
+                    '美食': 'fa-solid fa-utensils',
+                    '住宿': 'fa-solid fa-bed',
+                    '購物': 'fa-solid fa-bag-shopping',
+                    '交通': 'fa-solid fa-train-subway'
+                };
+                return icons[c] || 'fa-solid fa-location-dot';
+            };
+
+            const getCatStyle = (c) => {
+                const styles = {
+                    '航班': 'bg-deep-sea',
+                    '景點': 'bg-green-500',
+                    '美食': 'bg-accent-orange', // 亮橘色
+                    '住宿': 'bg-indigo-500',
+                    '購物': 'bg-pink-500',
+                    '交通': 'bg-blue-400'
+                };
+                return styles[c] || 'bg-sea-blue';
+            };
+
+            const getTransportIcon = (t) => {
+                return t === 'drive' ? 'fa-solid fa-car' : 
+                       t === 'walk' ? 'fa-solid fa-person-walking' : 
+                       'fa-solid fa-train-subway';
+            };
 
             return {
                 currentTab, selectedDateIdx, tabs, tripDates, itineraryData, currentDayItinerary,
