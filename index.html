@@ -7,7 +7,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script>
         tailwind.config = {
@@ -69,6 +69,16 @@
             color: white;
             box-shadow: 0 4px 10px rgba(22, 105, 122, 0.3);
         }
+        
+        /* 確保 icon 不會被其他字體覆蓋 */
+        .fa-solid, .fa-regular, .fa-solid, .far {
+            font-family: "Font Awesome 6 Free" !important;
+            font-weight: 900; /* Solid 版本必須是 900 */
+        }
+
+        .fa-regular {
+            font-weight: 400; /* Regular 版本則是 400 */
+        }        
         
         /* 拖曳樣式 */
         .dragging { opacity: 0.5; }
@@ -145,7 +155,7 @@
                             <div class="flex-1 flex flex-col items-center px-4">
                                 <div class="text-xs mb-1">{{ item.name }}</div>
                                 <div class="w-full h-[1px] bg-white/30 relative">
-                                    <i class="fas fa-plane absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
+                                    <i class="fa-solid fa-plane absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
                                 </div>
                                 <div class="text-[10px] mt-1">4h 30m</div>
                             </div>
@@ -155,7 +165,7 @@
                             </div>
                         </div>
                         <div class="absolute -right-4 -bottom-4 opacity-10 text-6xl">
-                            <i class="fas fa-plane-departure"></i>
+                            <i class="fa-solid fa-plane-departure"></i>
                         </div>
                     </div>
 
@@ -168,14 +178,14 @@
                             <div class="flex justify-between items-start">
                                 <h4 class="font-bold text-sm text-deep-sea">{{ item.time }} {{ item.name }}</h4>
                                 <button @click.stop="openNav(item.name)" class="text-sea-blue hover:text-deep-sea">
-                                    <i class="fas fa-location-arrow"></i>
+                                    <i class="fa-solid fa-location-arrow"></i>
                                 </button>
                             </div>
                             
                             <div class="mt-2 space-y-1">
                                 <p v-if="item.hours" class="text-[11px] text-gray-500"><i class="far fa-clock mr-1"></i> {{ item.hours }}</p>
-                                <p v-if="item.ticket" class="text-[11px] text-gray-500"><i class="fas fa-ticket-alt mr-1"></i> {{ item.ticket }}</p>
-                                <p v-if="item.feature" class="text-[11px] text-accent-orange font-medium"><i class="fas fa-star mr-1"></i> {{ item.feature }}</p>
+                                <p v-if="item.ticket" class="text-[11px] text-gray-500"><i class="fa-solid fa-ticket-alt mr-1"></i> {{ item.ticket }}</p>
+                                <p v-if="item.feature" class="text-[11px] text-accent-orange font-medium"><i class="fa-solid fa-star mr-1"></i> {{ item.feature }}</p>
                                 <div v-if="item.mapcode" class="inline-block bg-gray-100 px-2 py-0.5 rounded text-[10px] text-gray-400 mt-1">
                                     Map Code: {{ item.mapcode }}
                                 </div>
@@ -187,13 +197,13 @@
             </div>
 
             <button @click="openAddModal" class="fixed bottom-24 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-xl z-30 transform transition-transform hover:scale-110 active:scale-95">
-                <i class="fas fa-plus"></i>
+                <i class="fa-solid fa-plus"></i>
             </button>
         </div>
 
         <div v-if="currentTab === 'info'" class="space-y-4 pt-4">
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
-                <h3 class="font-bold text-sm mb-4"><i class="fas fa-calculator mr-2 text-sea-blue"></i>匯率換算 (今日即時)</h3>
+                <h3 class="font-bold text-sm mb-4"><i class="fa-solid fa-calculator mr-2 text-sea-blue"></i>匯率換算 (今日即時)</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="text-[10px] text-gray-400 block mb-1 uppercase">日幣 JPY</label>
@@ -207,7 +217,7 @@
             </div>
 
             <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
-                <h3 class="font-bold text-sm mb-4"><i class="fas fa-hotel mr-2 text-sea-blue"></i>住宿與通訊</h3>
+                <h3 class="font-bold text-sm mb-4"><i class="fa-solid fa-hotel mr-2 text-sea-blue"></i>住宿與通訊</h3>
                 <div class="space-y-4">
                     <div v-for="hotel in hotels" class="border-b border-gray-50 pb-3 last:border-0">
                         <div class="flex justify-between items-start">
@@ -223,11 +233,11 @@
             
             <div class="grid grid-cols-2 gap-3">
                 <a href="tel:110" class="bg-red-50 p-4 rounded-3xl flex items-center space-x-3 border border-red-100">
-                    <i class="fas fa-shield-alt text-red-500 text-xl"></i>
+                    <i class="fa-solid fa-shield-alt text-red-500 text-xl"></i>
                     <div><p class="text-[10px] text-red-400 font-bold">警察</p><p class="font-bold text-red-700">110</p></div>
                 </a>
                 <a href="tel:119" class="bg-orange-50 p-4 rounded-3xl flex items-center space-x-3 border border-orange-100">
-                    <i class="fas fa-ambulance text-orange-500 text-xl"></i>
+                    <i class="fa-solid fa-ambulance text-orange-500 text-xl"></i>
                     <div><p class="text-[10px] text-orange-400 font-bold">救護/消防</p><p class="font-bold text-orange-700">119</p></div>
                 </a>
             </div>
@@ -239,19 +249,19 @@
                     <div class="h-32 bg-gray-100 overflow-hidden">
                         <img v-if="item.image" :src="item.image" class="w-full h-full object-cover">
                         <div v-else class="w-full h-full flex items-center justify-center text-gray-300">
-                            <i class="fas fa-image text-2xl"></i>
+                            <i class="fa-solid fa-image text-2xl"></i>
                         </div>
                     </div>
                     <div class="p-3">
                         <p class="text-xs font-bold text-deep-sea truncate">{{ item.name }}</p>
                     </div>
                     <button @click="deleteShopping(idx)" class="absolute top-2 right-2 w-6 h-6 bg-red-500/80 text-white rounded-full text-[10px]">
-                        <i class="fas fa-times"></i>
+                        <i class="fa-solid fa-times"></i>
                     </button>
                 </div>
             </div>
             <button @click="openShoppingAdd" class="fixed bottom-24 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-xl z-30">
-                <i class="fas fa-plus"></i>
+                <i class="fa-solid fa-plus"></i>
             </button>
         </div>
 
@@ -260,7 +270,7 @@
                 <p class="text-xs opacity-70 mb-1">Total Trip Expenses</p>
                 <div class="text-3xl font-black">¥ {{ totalExpenseJPY }}</div>
                 <div class="text-[10px] mt-2 bg-white/10 inline-block px-3 py-1 rounded-full">約 HKD ${{ (totalExpenseJPY * 0.05).toFixed(0) }}</div>
-                <i class="fas fa-coins absolute -right-4 -bottom-4 text-7xl opacity-10 rotate-12"></i>
+                <i class="fa-solid fa-coins absolute -right-4 -bottom-4 text-7xl opacity-10 rotate-12"></i>
             </div>
             
             <div class="space-y-3">
@@ -281,7 +291,7 @@
                 </div>
             </div>
             <button @click="openExpenseAdd" class="fixed bottom-24 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-xl z-30">
-                <i class="fas fa-plus"></i>
+                <i class="fa-solid fa-plus"></i>
             </button>
         </div>
 
@@ -289,14 +299,14 @@
             <div @click="openGoogleLens" class="bg-white p-5 rounded-3xl shadow-md flex items-center justify-between border-2 border-sea-blue/20 cursor-pointer active:scale-95 transition-all">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 to-green-400 flex items-center justify-center text-white text-xl">
-                        <i class="fas fa-camera"></i>
+                        <i class="fa-solid fa-camera"></i>
                     </div>
                     <div>
                         <p class="font-bold text-deep-sea">Google APP 智慧鏡頭</p>
                         <p class="text-[10px] text-gray-400">快速翻譯標籤與說明文字</p>
                     </div>
                 </div>
-                <i class="fas fa-chevron-right text-gray-300"></i>
+                <i class="fa-solid fa-chevron-right text-gray-300"></i>
             </div>
 
             <div class="grid grid-cols-1 gap-3">
@@ -306,7 +316,7 @@
                         <p class="text-xs font-bold text-deep-sea">{{ phrase.jp }}</p>
                         <p class="text-[10px] text-gray-400">{{ phrase.zh }}</p>
                     </div>
-                    <i class="fas fa-volume-up text-sea-blue/30 text-xs"></i>
+                    <i class="fa-solid fa-volume-up text-sea-blue/30 text-xs"></i>
                 </div>
             </div>
         </div>
@@ -327,7 +337,7 @@
         <div class="bg-white w-full rounded-t-[40px] p-8 max-h-[85vh] overflow-y-auto shadow-2xl">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-bold text-deep-sea">{{ isEdit ? '編輯行程' : '新增行程' }}</h3>
-                <button @click="itineraryModal = false" class="text-gray-300 hover:text-red-500"><i class="fas fa-times-circle text-2xl"></i></button>
+                <button @click="itineraryModal = false" class="text-gray-300 hover:text-red-500"><i class="fa-solid fa-times-circle text-2xl"></i></button>
             </div>
             
             <div class="space-y-5">
@@ -378,7 +388,7 @@
 
                 <div class="flex space-x-3 pt-4">
                     <button v-if="isEdit" @click="confirmDelete" class="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center shadow-inner">
-                        <i class="fas fa-trash"></i>
+                        <i class="fa-solid fa-trash"></i>
                     </button>
                     <button @click="saveItinerary" class="flex-1 bg-deep-sea text-white font-bold py-4 rounded-2xl shadow-lg">儲存行程</button>
                 </div>
@@ -400,11 +410,11 @@
             const editIdx = ref(null);
 
             const tabs = [
-                { id: 'itinerary', icon: 'fas fa-map-marker-alt' },
-                { id: 'info', icon: 'fas fa-info-circle' },
-                { id: 'shopping', icon: 'fas fa-shopping-basket' },
-                { id: 'expenses', icon: 'fas fa-yen-sign' },
-                { id: 'translate', icon: 'fas fa-language' }
+                { id: 'itinerary', icon: 'fa-solid fa-map-marker-alt' },
+                { id: 'info', icon: 'fa-solid fa-info-circle' },
+                { id: 'shopping', icon: 'fa-solid fa-shopping-basket' },
+                { id: 'expenses', icon: 'fa-solid fa-yen-sign' },
+                { id: 'translate', icon: 'fa-solid fa-language' }
             ];
 
             const dates = [
@@ -441,12 +451,12 @@
             const currentWeather = computed(() => {
                 const city = dates[selectedDateIndex.value].loc;
                 const weatherMap = {
-                    'Yokohama': { icon: 'fas fa-sun', temp: 22, feel: 24, loc: 'Yokohama' },
-                    'Kamakura': { icon: 'fas fa-sun', temp: 21, feel: 23, loc: 'Kamakura' },
-                    'Atami': { icon: 'fas fa-cloud-sun', temp: 24, feel: 26, loc: 'Atami' },
-                    'Ito': { icon: 'fas fa-cloud', temp: 20, feel: 19, loc: 'Ito' },
-                    'Hakone': { icon: 'fas fa-cloud-rain', temp: 18, feel: 17, loc: 'Hakone' },
-                    'Tokyo': { icon: 'fas fa-sun', temp: 25, feel: 27, loc: 'Tokyo' }
+                    'Yokohama': { icon: 'fa-solid fa-sun', temp: 22, feel: 24, loc: 'Yokohama' },
+                    'Kamakura': { icon: 'fa-solid fa-sun', temp: 21, feel: 23, loc: 'Kamakura' },
+                    'Atami': { icon: 'fa-solid fa-cloud-sun', temp: 24, feel: 26, loc: 'Atami' },
+                    'Ito': { icon: 'fa-solid fa-cloud', temp: 20, feel: 19, loc: 'Ito' },
+                    'Hakone': { icon: 'fa-solid fa-cloud-rain', temp: 18, feel: 17, loc: 'Hakone' },
+                    'Tokyo': { icon: 'fa-solid fa-sun', temp: 25, feel: 27, loc: 'Tokyo' }
                 };
                 return weatherMap[city] || weatherMap['Tokyo'];
             });
