@@ -145,6 +145,66 @@
                         <div class="w-0.5 h-6 border-l-2 border-dashed border-sea-blue/30"></div>
                     </div>
 
+                    <div v-if="showItineraryModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-5 overflow-y-auto max-h-[90vh]">
+            <h3 class="font-bold text-lg mb-4 text-deep-sea">{{ isEditMode ? '編輯行程' : '新增行程' }}</h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs text-gray-500">分類</label>
+                    <select v-model="currentForm.type" class="w-full border rounded p-2 bg-white">
+                        <option value="attraction">景點</option>
+                        <option value="food">美食</option>
+                        <option value="accommodation">住宿</option>
+                        <option value="shopping">購物</option>
+                        <option value="flight">航班</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500">名稱</label>
+                    <input type="text" v-model="currentForm.name" class="w-full border rounded p-2">
+                </div>
+                <div class="flex space-x-2">
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-500">時間</label>
+                        <input type="time" v-model="currentForm.time" class="w-full border rounded p-2">
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-500">營業時間</label>
+                        <input type="text" v-model="currentForm.hours" placeholder="ex: 09:00-18:00" class="w-full border rounded p-2">
+                    </div>
+                </div>
+                <div v-if="currentForm.type === 'attraction'">
+                    <label class="text-xs text-gray-500">門票</label>
+                    <input type="text" v-model="currentForm.ticket" placeholder="ex: ¥500" class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500">Map Code</label>
+                    <input type="text" v-model="currentForm.mapcode" class="w-full border rounded p-2">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500">備註/特色</label>
+                    <textarea v-model="currentForm.note" class="w-full border rounded p-2 h-20"></textarea>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500">前往此處的交通方式 (從上一站)</label>
+                    <select v-model="currentForm.transportType" class="w-full border rounded p-2 bg-white">
+                        <option value="walk">步行</option>
+                        <option value="drive">開車</option>
+                        <option value="transit">大眾運輸</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <button v-if="isEditMode" @click="confirmDeleteItinerary" class="text-red-500 font-bold px-4 py-2 hover:bg-red-50 rounded">刪除</button>
+                <div class="flex space-x-2 ml-auto">
+                    <button @click="showItineraryModal = false" class="px-4 py-2 border rounded text-gray-500">取消</button>
+                    <button @click="saveItinerary" class="px-4 py-2 bg-deep-sea text-white rounded">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
                     <div v-if="item.category === '航班'" class="bg-gradient-to-br from-deep-sea to-sea-blue p-6 rounded-[32px] text-white shadow-xl relative overflow-hidden">
                         <div class="flex justify-between items-start mb-6">
                             <span class="bg-white/20 backdrop-blur text-[10px] px-3 py-1 rounded-full font-bold">FLIGHT INFO</span>
@@ -225,18 +285,21 @@
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-[32px] shadow-sm space-y-4">
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-accent-orange/10 text-accent-orange rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-car"></i>
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <h3 class="font-bold border-b pb-2 mb-3"><i class="fas fa-car mr-2 text-sea-blue"></i>租車資訊</h3>
+                <div class="text-sm">
+                    <div class="font-bold mb-1">Nippon Rent-a-car</div>
+                    <div class="mb-2">
+                        <span class="text-xs bg-gray-200 px-1 rounded">取車</span> 伊東站前店<br>
+                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openGoogleMap('Nippon Rent-a-car Ito')"><i class="fas fa-location-arrow"></i> 導航</span>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-[10px] font-bold text-gray-400">Nippon Rent-a-car</p>
-                        <p class="text-xs font-bold">伊東取車 ➔ 小田原還車</p>
+                    <div>
+                        <span class="text-xs bg-gray-200 px-1 rounded">還車</span> 小田原店<br>
+                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openGoogleMap('Nippon Rent-a-car Odawara')"><i class="fas fa-location-arrow"></i> 導航</span>
                     </div>
-                    <button @click="openGoogleMap('Nippon Rent-a-car Ito Station')" class="text-sea-blue text-xs"><i class="fa-solid fa-location-dot"></i></button>
                 </div>
             </div>
+
             
             <div class="grid grid-cols-2 gap-3">
                 <a href="tel:110" class="bg-red-50 p-4 rounded-3xl flex items-center space-x-3 border border-red-100">
@@ -278,7 +341,7 @@
                 <p class="text-[10px] font-bold opacity-60 uppercase tracking-widest mb-2">Total Expenses</p>
                 <div class="text-4xl font-black tracking-tighter">¥ {{ totalExpenses.toLocaleString() }}</div>
                 <div class="mt-4 inline-block bg-white/10 px-4 py-1.5 rounded-full text-[11px] font-bold">
-                    約 HKD ${{ (totalExpenses * 0.051).toFixed(0) }}
+                    約 HKD ${{ (totalExpenses * 0.0495).toFixed(0) }}
                 </div>
                 <i class="fa-solid fa-coins absolute -right-6 -bottom-6 text-9xl opacity-10 rotate-12"></i>
             </div>
@@ -467,7 +530,56 @@
             });
 
             const currentDayItinerary = computed(() => itineraryData.value[selectedDateIdx.value] || []);
+            // 拖曳排序邏輯 (HTML5 Drag and Drop)
+            const draggedItemIndex = ref(null);
+            const onDragStart = (event, index) => {
+                draggedItemIndex.value = index;
+                event.dataTransfer.effectAllowed = 'move';
+            };
+            const onDrop = (event, index) => {
+                const dayData = itineraryData.value[selectedDateIndex.value];
+                const draggedItem = dayData.splice(draggedItemIndex.value, 1)[0];
+                dayData.splice(index, 0, draggedItem);
+                draggedItemIndex.value = null;
+            };
 
+            // Modal 狀態
+            const showItineraryModal = ref(false);
+            const isEditMode = ref(false);
+            const currentForm = ref({});
+            
+            const openItineraryModal = () => {
+                isEditMode.value = false;
+                currentForm.value = { type: 'attraction', name: '', time: '', hours: '', ticket: '', mapcode: '', note: '', transportType: 'transit' };
+                showItineraryModal.value = true;
+            };
+
+            const editItem = (item) => {
+                isEditMode.value = true;
+                currentForm.value = { ...item };
+                showItineraryModal.value = true;
+            };
+
+            const saveItinerary = () => {
+                if(isEditMode.value) {
+                    const index = itineraryData.value[selectedDateIndex.value].findIndex(i => i.id === currentForm.value.id);
+                    if(index !== -1) itineraryData.value[selectedDateIndex.value][index] = { ...currentForm.value };
+                } else {
+                    currentForm.value.id = Date.now();
+                    itineraryData.value[selectedDateIndex.value].push({ ...currentForm.value });
+                    // 自動按時間排序
+                    itineraryData.value[selectedDateIndex.value].sort((a, b) => a.time.localeCompare(b.time));
+                }
+                showItineraryModal.value = false;
+            };
+
+            const confirmDeleteItinerary = () => {
+                if(confirm("確定要刪除這個行程嗎？")) {
+                    const index = itineraryData.value[selectedDateIndex.value].findIndex(i => i.id === currentForm.value.id);
+                    if(index !== -1) itineraryData.value[selectedDateIndex.value].splice(index, 1);
+                    showItineraryModal.value = false;
+                }
+            };
             // 天氣系統 (整合自 index 2)
             const mockWeather = computed(() => {
                 const loc = tripDates[selectedDateIdx.value].loc;
@@ -485,17 +597,20 @@
             const getWeatherIcon = () => `fa-solid fa-${mockWeather.value.icon}`;
 
             // 匯率系統 (整合自 index 1)
-            const fx = ref({ jpy: 10000, hkd: 494 });
-            const rate = 0.0494;
+            const fx = ref({ jpy: 10000, hkd: 495 });
+            const rate = 0.0495;
             const jpyToHkd = () => fx.value.hkd = Math.round(fx.value.jpy * rate);
             const hkdToJpy = () => fx.value.jpy = Math.round(fx.value.hkd / rate);
 
             // 住宿清單 (整合自內容)
-            const hotels = [
-                { name: 'Plumm飯店', dates: '05/22 - 05/24', address: '橫濱' },
-                { name: '望水日式旅館', dates: '05/25 - 05/26', address: '伊東' },
-                { name: '太陽城王子大飯店', dates: '05/28 - 05/30', address: '池袋' }
-            ];
+            const hotels = ref([
+                { name: 'Plumm飯店', dates: '22/05 - 24/05' },
+                { name: '格蘭度假優雅熱海酒店', dates: '24/05 - 25/05' },
+                { name: '望水日式旅館', dates: '25/05 - 26/05' },
+                { name: '季の湯 雪月花', dates: '26/05 - 28/05' },
+                { name: '太陽城王子大飯店', dates: '28/05 - 30/05' }
+            ]);
+
 
             // 翻譯句庫 (整合自 index 2)
             const phrases = [
@@ -529,6 +644,8 @@
 
             return {
                 currentTab, selectedDateIdx, tabs, tripDates, itineraryData, currentDayItinerary,
+                showItineraryModal, isEditMode, currentForm, openItineraryModal, editItem, saveItinerary, confirmDeleteItinerary,
+                onDragStart, onDrop,
                 mockWeather, getWeatherIcon, fx, jpyToHkd, hkdToJpy, hotels, phrases, activePhrase,
                 expenses, totalExpenses, shoppingList, openGoogleMap, launchLens,
                 getCatIcon, getCatStyle, getTransportIcon
