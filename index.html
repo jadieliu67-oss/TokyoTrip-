@@ -6,19 +6,19 @@
     <title>Japan Trip 2026 | Tokyo & Seaside</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'sea-blue': '#82C0CC',        // 海藍
-                        'deep-sea': '#16697A',        // 深藍
-                        'sand-white': '#EDE7E3',      // 沙灘白
-                        'bg-light': '#F2F9F9',         // 延伸背景色
-                        'accent-orange': '#FFA62B'    // 點綴橘
+                        'sea-blue': '#82C0CC',        // 東京海邊淺藍
+                        'deep-sea': '#16697A',        // 深藍色文字
+                        'sand-white': '#EDE7E3',      // 柔和白底
+                        'bg-blue': '#F2F9F9',         // 網頁主底色延伸
+                        'accent-orange': '#FFA62B'    // 點綴橘色
                     },
                     fontFamily: {
                         sans: ['"Noto Sans TC"', 'sans-serif'],
@@ -30,345 +30,361 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-        body { background-color: #F2F9F9; color: #16697A; font-family: 'Noto Sans TC', sans-serif; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 圓弧銜接 */
-        .arc-overlay {
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 40px;
+        body {
             background-color: #F2F9F9;
-            border-top-left-radius: 40px;
-            border-top-right-radius: 40px;
+            font-family: 'Noto Sans TC', sans-serif;
+            color: #16697A;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .nav-btn.active {
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 圓弧銜接特效 */
+        .header-arc {
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        .content-up {
+            margin-top: -30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 底部導航陰影 */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+        }
+
+        /* 行程卡片動畫 */
+        .card-enter { transition: all 0.3s ease; }
+        .card-enter:active { transform: scale(0.98); }
+
+        /* 日期選擇器啟動樣式 */
+        .date-active {
             background-color: #16697A;
             color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(22, 105, 122, 0.3);
+            box-shadow: 0 4px 10px rgba(22, 105, 122, 0.3);
         }
         
-        .itinerary-card { transition: all 0.3s ease; }
-        .dragging { opacity: 0.5; transform: scale(0.95); }
+        /* 拖曳樣式 */
+        .dragging { opacity: 0.5; }
     </style>
 </head>
-<body class="antialiased pb-20">
+<body class="antialiased">
 
-<div id="app">
-    <div class="relative w-full h-[250px]">
-        <img src="Banner_pic.png" alt="Tokyo Seaside Banner" class="w-full h-full object-cover">
-        <div class="arc-overlay"></div>
+<div id="app" v-cloak>
+    <div class="relative w-full h-[250px] overflow-hidden shadow-lg bg-deep-sea">
+        <img src="Banner1.png" alt="Banner" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-bg-blue/20"></div>
         
-        <div class="absolute bottom-4 left-0 right-0 px-6 flex justify-between items-center z-10">
-            <h1 class="text-deep-sea font-bold text-xl drop-shadow-sm">Japan 2026</h1>
-            <div class="flex space-x-2">
-                <button @click="currentTab = 'itinerary'" :class="{'active': currentTab === 'itinerary'}" class="nav-btn bg-white/90 text-deep-sea w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all">
-                    <i class="fas fa-map-marker-alt"></i>
-                </button>
-                <button @click="currentTab = 'info'" :class="{'active': currentTab === 'info'}" class="nav-btn bg-white/90 text-deep-sea w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all">
-                    <i class="fas fa-info-circle"></i>
-                </button>
-                <button @click="currentTab = 'shopping'" :class="{'active': currentTab === 'shopping'}" class="nav-btn bg-white/90 text-deep-sea w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all">
-                    <i class="fas fa-shopping-basket"></i>
-                </button>
-                <button @click="currentTab = 'expenses'" :class="{'active': currentTab === 'expenses'}" class="nav-btn bg-white/90 text-deep-sea w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all">
-                    <i class="fas fa-yen-sign"></i>
-                </button>
-                <button @click="currentTab = 'translate'" :class="{'active': currentTab === 'translate'}" class="nav-btn bg-white/90 text-deep-sea w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all">
-                    <i class="fas fa-language"></i>
-                </button>
-            </div>
+        <div class="absolute bottom-10 right-4 flex space-x-2 z-20">
+            <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id" 
+                    :class="['w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-md', 
+                             currentTab === tab.id ? 'bg-deep-sea text-white' : 'bg-white/90 text-deep-sea']">
+                <i :class="tab.icon"></i>
+            </button>
         </div>
+        
+        <div class="absolute bottom-0 w-full h-10 bg-bg-blue header-arc"></div>
     </div>
 
-    <div class="max-w-md mx-auto px-4">
+    <main class="content-up px-4 pb-24">
         
-        <div v-show="currentTab === 'itinerary'">
-            <div class="flex space-x-4 overflow-x-auto scrollbar-hide py-4 mb-2">
+        <div v-if="currentTab === 'itinerary'">
+            <div class="flex overflow-x-auto no-scrollbar space-x-3 py-2 mb-4">
                 <div v-for="(date, index) in dates" :key="index" 
                      @click="selectedDateIndex = index"
-                     class="flex flex-col items-center justify-center min-w-[65px] h-[75px] cursor-pointer transition-all rounded-2xl"
-                     :class="selectedDateIndex === index ? 'bg-deep-sea text-white shadow-lg' : 'bg-white text-deep-sea/60 shadow-sm'">
-                    <span class="text-lg font-bold">{{ date.week }}</span>
-                    <span class="text-sm">{{ date.day }}</span>
+                     :class="['flex-shrink-0 w-16 h-20 rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer border border-white', 
+                              selectedDateIndex === index ? 'date-active' : 'bg-white text-deep-sea/60']">
+                    <span class="text-xs font-medium">{{ date.week }}</span>
+                    <span class="text-xl font-bold">{{ date.dayNum }}</span>
                 </div>
             </div>
 
-            <div class="bg-white/80 backdrop-blur rounded-2xl p-4 mb-4 flex items-center justify-between border border-sea-blue/20 shadow-sm">
+            <div class="bg-white/80 rounded-2xl p-4 mb-4 flex items-center justify-between border border-sea-blue/20 shadow-sm">
                 <div class="flex items-center space-x-3">
-                    <i :class="weather.icon" class="text-3xl text-accent-orange"></i>
+                    <div class="text-3xl text-accent-orange">
+                        <i :class="currentWeather.icon"></i>
+                    </div>
                     <div>
-                        <div class="text-xs text-gray-500">{{ weather.location }}</div>
-                        <div class="font-bold text-deep-sea">{{ weather.temp }}°C <span class="text-xs font-normal ml-1">體感 {{ weather.feel }}°C</span></div>
+                        <div class="text-xs text-gray-400">當前區域：{{ currentWeather.loc }}</div>
+                        <div class="font-bold text-deep-sea">{{ currentWeather.temp }}°C <span class="text-xs font-normal opacity-70">體感 {{ currentWeather.feel }}°C</span></div>
                     </div>
                 </div>
-                <div class="text-[10px] text-gray-400 text-right">自動更新數據</div>
+                <div class="text-[10px] text-gray-400 text-right italic">
+                    Powered by <br>weathernews.jp
+                </div>
             </div>
 
-            <div class="space-y-1">
-                <template v-for="(item, index) in currentDayItinerary" :key="item.id">
+            <div class="space-y-4">
+                <div v-for="(item, idx) in currentItinerary" :key="item.id" class="relative">
                     
-                    <div v-if="index > 0" class="flex flex-col items-center py-1">
-                        <div class="h-4 w-0.5 bg-sea-blue/30"></div>
-                        <div class="flex items-center gap-2 text-[10px] text-sea-blue font-medium bg-sea-blue/10 px-3 py-0.5 rounded-full">
-                            <i :class="getTransportIcon(item.transportType)"></i>
-                            <span>{{ item.transitTime || '20m' }}</span>
+                    <div v-if="idx > 0" class="flex flex-col items-center my-1 ml-6 w-10">
+                        <div class="w-0.5 h-6 bg-sea-blue/30 border-dashed border-l"></div>
+                        <div class="flex items-center space-x-1 text-[10px] text-sea-blue font-bold bg-white px-2 py-0.5 rounded-full border border-sea-blue/20">
+                            <i :class="getTransportIcon(item.transport)"></i>
+                            <span>{{ item.transitTime }}</span>
                         </div>
-                        <div class="h-4 w-0.5 bg-sea-blue/30"></div>
+                        <div class="w-0.5 h-6 bg-sea-blue/30 border-dashed border-l"></div>
                     </div>
 
-                    <div v-if="item.type === 'flight'" class="bg-gradient-to-r from-deep-sea to-sea-blue rounded-2xl p-5 shadow-md text-white">
+                    <div v-if="idx === 0 && item.category === '航班'" class="bg-gradient-to-r from-deep-sea to-sea-blue p-5 rounded-3xl text-white shadow-lg overflow-hidden relative">
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full uppercase">Flight Information</span>
-                            <i class="fas fa-edit text-xs opacity-70" @click="editItem(item)"></i>
+                            <span class="bg-white/20 text-[10px] px-2 py-1 rounded-full">{{ item.category }}</span>
+                            <span class="text-xl font-black">{{ item.time }}</span>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between px-2">
                             <div class="text-center">
-                                <div class="text-2xl font-bold">{{ item.time }}</div>
-                                <div class="text-xs opacity-80">{{ item.from }}</div>
+                                <div class="text-2xl font-bold">HKG</div>
+                                <div class="text-[10px] opacity-70">Hong Kong</div>
                             </div>
-                            <div class="flex flex-col items-center flex-1 px-4">
-                                <span class="text-[10px] mb-1">{{ item.flightNo }}</span>
-                                <div class="w-full h-px bg-white/30 relative">
-                                    <i class="fas fa-plane absolute left-1/2 -top-1.5 -translate-x-1/2 text-sm"></i>
+                            <div class="flex-1 flex flex-col items-center px-4">
+                                <div class="text-xs mb-1">{{ item.name }}</div>
+                                <div class="w-full h-[1px] bg-white/30 relative">
+                                    <i class="fas fa-plane absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
                                 </div>
-                                <span class="text-[10px] mt-1">4h 30m</span>
+                                <div class="text-[10px] mt-1">4h 30m</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold">{{ item.endTime }}</div>
-                                <div class="text-xs opacity-80">{{ item.to }}</div>
+                                <div class="text-2xl font-bold">NRT</div>
+                                <div class="text-[10px] opacity-70">Narita</div>
                             </div>
+                        </div>
+                        <div class="absolute -right-4 -bottom-4 opacity-10 text-6xl">
+                            <i class="fas fa-plane-departure"></i>
                         </div>
                     </div>
 
-                    <div v-else class="bg-white rounded-2xl p-4 shadow-sm border-l-4 itinerary-card relative"
-                         :class="getCategoryBorder(item.type)"
-                         draggable="true"
-                         @dragstart="onDragStart($event, index)"
-                         @dragover.prevent
-                         @drop="onDrop($event, index)">
-                        
-                        <div class="flex justify-between items-start">
-                            <div class="flex gap-3">
-                                <div :class="getCategoryBg(item.type)" class="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-sm">
-                                    <i :class="getCategoryIcon(item.type)"></i>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-bold text-deep-sea">{{ item.time }} {{ item.name }}</div>
-                                    <div class="text-[10px] text-gray-400">{{ getCategoryName(item.type) }}</div>
-                                </div>
-                            </div>
-                            <div class="flex gap-3 text-sea-blue/60 pt-1">
-                                <i class="fas fa-location-arrow cursor-pointer hover:text-deep-sea" @click="openGoogleMap(item.name)"></i>
-                                <i class="fas fa-ellipsis-v cursor-pointer hover:text-deep-sea" @click="editItem(item)"></i>
-                            </div>
+                    <div v-else class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-start space-x-3 card-enter"
+                         @click="openEditModal(item, idx)">
+                        <div :class="['w-12 h-12 rounded-xl flex items-center justify-center text-white flex-shrink-0', getCatColor(item.category)]">
+                            <i :class="getCatIcon(item.category)"></i>
                         </div>
-
-                        <div class="mt-3 grid grid-cols-2 gap-2 text-[11px] text-gray-600 pl-1">
-                            <div v-if="item.hours"><i class="far fa-clock mr-1 text-sea-blue/70"></i> {{ item.hours }}</div>
-                            <div v-if="item.ticket"><i class="fas fa-ticket-alt mr-1 text-sea-blue/70"></i> {{ item.ticket }}</div>
-                            <div v-if="item.mapcode" class="col-span-2"><i class="fas fa-map-pin mr-1 text-sea-blue/70"></i> MapCode: {{ item.mapcode }}</div>
-                            <div v-if="item.note" class="col-span-2 bg-bg-light p-2 rounded-lg mt-1 italic text-deep-sea/70">
-                                {{ item.note }}
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-sm text-deep-sea">{{ item.time }} {{ item.name }}</h4>
+                                <button @click.stop="openNav(item.name)" class="text-sea-blue hover:text-deep-sea">
+                                    <i class="fas fa-location-arrow"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mt-2 space-y-1">
+                                <p v-if="item.hours" class="text-[11px] text-gray-500"><i class="far fa-clock mr-1"></i> {{ item.hours }}</p>
+                                <p v-if="item.ticket" class="text-[11px] text-gray-500"><i class="fas fa-ticket-alt mr-1"></i> {{ item.ticket }}</p>
+                                <p v-if="item.feature" class="text-[11px] text-accent-orange font-medium"><i class="fas fa-star mr-1"></i> {{ item.feature }}</p>
+                                <div v-if="item.mapcode" class="inline-block bg-gray-100 px-2 py-0.5 rounded text-[10px] text-gray-400 mt-1">
+                                    Map Code: {{ item.mapcode }}
+                                </div>
+                                <p v-if="item.note" class="text-[11px] text-gray-400 italic mt-1">{{ item.note }}</p>
                             </div>
                         </div>
                     </div>
-                </template>
+                </div>
             </div>
 
-            <button @click="openModal('itinerary')" class="fixed bottom-6 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40 hover:scale-110 transition-transform">
+            <button @click="openAddModal" class="fixed bottom-24 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-xl z-30 transform transition-transform hover:scale-110 active:scale-95">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
 
-        <div v-show="currentTab === 'info'" class="py-4 space-y-4 pb-20">
-            <div class="bg-white rounded-2xl p-5 shadow-sm">
-                <h3 class="font-bold text-sm mb-4 flex items-center text-deep-sea">
-                    <i class="fas fa-calculator mr-2 text-sea-blue"></i>匯率換算 (今日匯率)
-                </h3>
-                <div class="flex items-center space-x-3">
-                    <div class="flex-1">
-                        <label class="text-[10px] text-gray-400 block mb-1">日幣 JPY</label>
-                        <input type="number" v-model="fx.jpy" @input="convertCurrency('jpy')" class="w-full bg-bg-light border-none rounded-xl p-3 text-sm focus:ring-2 ring-sea-blue outline-none">
+        <div v-if="currentTab === 'info'" class="space-y-4 pt-4">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                <h3 class="font-bold text-sm mb-4"><i class="fas fa-calculator mr-2 text-sea-blue"></i>匯率換算 (今日即時)</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] text-gray-400 block mb-1 uppercase">日幣 JPY</label>
+                        <input type="number" v-model="fx.jpy" @input="convertToHKD" class="w-full bg-gray-50 rounded-xl p-3 text-sm focus:ring-2 ring-sea-blue outline-none border-none">
                     </div>
-                    <i class="fas fa-exchange-alt text-sea-blue pt-5"></i>
-                    <div class="flex-1">
-                        <label class="text-[10px] text-gray-400 block mb-1">港幣 HKD</label>
-                        <input type="number" v-model="fx.hkd" @input="convertCurrency('hkd')" class="w-full bg-sea-blue/10 border-none rounded-xl p-3 text-sm font-bold text-deep-sea outline-none">
+                    <div>
+                        <label class="text-[10px] text-gray-400 block mb-1 uppercase">港幣 HKD</label>
+                        <input type="number" v-model="fx.hkd" @input="convertToJPY" class="w-full bg-sea-blue/10 rounded-xl p-3 text-sm font-bold text-deep-sea focus:ring-2 ring-sea-blue outline-none border-none">
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl p-5 shadow-sm">
-                <h3 class="font-bold text-sm mb-4 text-deep-sea"><i class="fas fa-bed mr-2 text-sea-blue"></i>住宿飯店</h3>
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                <h3 class="font-bold text-sm mb-4"><i class="fas fa-hotel mr-2 text-sea-blue"></i>住宿與通訊</h3>
                 <div class="space-y-4">
-                    <div v-for="h in hotels" class="border-b border-gray-50 pb-3 last:border-0">
+                    <div v-for="hotel in hotels" class="border-b border-gray-50 pb-3 last:border-0">
                         <div class="flex justify-between items-start">
                             <div>
-                                <div class="text-sm font-bold">{{ h.name }}</div>
-                                <div class="text-[10px] text-gray-400">{{ h.dates }}</div>
-                                <div class="text-[11px] text-sea-blue mt-1" @click="openGoogleMap(h.name)">
-                                    <i class="fas fa-map-marker-alt mr-1"></i> 點此開啟導航
-                                </div>
+                                <p class="text-xs font-bold">{{ hotel.name }}</p>
+                                <p class="text-[10px] text-gray-400">{{ hotel.dateRange }}</p>
                             </div>
-                            <a :href="'tel:' + h.tel" class="w-8 h-8 bg-green-50 text-green-600 rounded-full flex items-center justify-center text-xs">
-                                <i class="fas fa-phone"></i>
-                            </a>
+                            <button @click="openNav(hotel.address)" class="text-xs text-sea-blue font-bold">導航</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-accent-orange">
-                <h3 class="font-bold text-sm mb-3 text-deep-sea"><i class="fas fa-car mr-2 text-accent-orange"></i>租車詳情 (Nippon Rent-a-car)</h3>
-                <div class="text-[11px] space-y-3">
-                    <div class="bg-bg-light p-3 rounded-xl">
-                        <span class="font-bold text-deep-sea block mb-1">取車：伊東站前店</span>
-                        1 Chome-7-6 Yukawa, Itō, Shizuoka 414-0002
-                        <div class="text-sea-blue mt-2 cursor-pointer font-bold" @click="openGoogleMap('Nippon Rent-a-car Ito')">開啟導航 →</div>
-                    </div>
-                    <div class="bg-bg-light p-3 rounded-xl">
-                        <span class="font-bold text-deep-sea block mb-1">還車：小田原店</span>
-                        1 Chome-14-2 Shiroyama, Odawara, Kanagawa 250-0045
-                        <div class="text-sea-blue mt-2 cursor-pointer font-bold" @click="openGoogleMap('Nippon Rent-a-car Odawara')">開啟導航 →</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <a href="tel:110" class="bg-red-50 p-4 rounded-2xl flex items-center space-x-3 border border-red-100">
-                    <div class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center"><i class="fas fa-shield-alt"></i></div>
-                    <div><div class="text-xs font-bold text-red-600">警察</div><div class="text-lg font-bold">110</div></div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <a href="tel:110" class="bg-red-50 p-4 rounded-3xl flex items-center space-x-3 border border-red-100">
+                    <i class="fas fa-shield-alt text-red-500 text-xl"></i>
+                    <div><p class="text-[10px] text-red-400 font-bold">警察</p><p class="font-bold text-red-700">110</p></div>
                 </a>
-                <a href="tel:119" class="bg-orange-50 p-4 rounded-2xl flex items-center space-x-3 border border-orange-100">
-                    <div class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center"><i class="fas fa-ambulance"></i></div>
-                    <div><div class="text-xs font-bold text-orange-600">救護/消防</div><div class="text-lg font-bold">119</div></div>
+                <a href="tel:119" class="bg-orange-50 p-4 rounded-3xl flex items-center space-x-3 border border-orange-100">
+                    <i class="fas fa-ambulance text-orange-500 text-xl"></i>
+                    <div><p class="text-[10px] text-orange-400 font-bold">救護/消防</p><p class="font-bold text-orange-700">119</p></div>
                 </a>
             </div>
         </div>
 
-        <div v-show="currentTab === 'shopping'" class="py-4 pb-20">
+        <div v-if="currentTab === 'shopping'" class="pt-4">
             <div class="grid grid-cols-2 gap-4">
-                <div v-for="(item, idx) in shoppingList" :key="idx" class="bg-white rounded-2xl shadow-sm overflow-hidden relative group">
-                    <img :src="item.img" class="w-full h-32 object-cover">
-                    <div class="p-3">
-                        <div class="text-xs font-bold text-deep-sea truncate">{{ item.name }}</div>
+                <div v-for="(item, idx) in shoppingItems" :key="idx" class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 relative group">
+                    <div class="h-32 bg-gray-100 overflow-hidden">
+                        <img v-if="item.image" :src="item.image" class="w-full h-full object-cover">
+                        <div v-else class="w-full h-full flex items-center justify-center text-gray-300">
+                            <i class="fas fa-image text-2xl"></i>
+                        </div>
                     </div>
-                    <button @click="removeItem('shopping', idx)" class="absolute top-2 right-2 w-6 h-6 bg-black/40 text-white rounded-full text-[10px] backdrop-blur-md">
+                    <div class="p-3">
+                        <p class="text-xs font-bold text-deep-sea truncate">{{ item.name }}</p>
+                    </div>
+                    <button @click="deleteShopping(idx)" class="absolute top-2 right-2 w-6 h-6 bg-red-500/80 text-white rounded-full text-[10px]">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
             </div>
-            <button @click="openModal('shopping')" class="fixed bottom-6 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40">
+            <button @click="openShoppingAdd" class="fixed bottom-24 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-xl z-30">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
 
-        <div v-show="currentTab === 'expenses'" class="py-4 pb-20">
-            <div class="bg-deep-sea rounded-3xl p-6 text-white mb-6 shadow-xl relative overflow-hidden">
-                <div class="relative z-10">
-                    <div class="text-xs opacity-70 mb-1">Total Trip Expenses</div>
-                    <div class="text-3xl font-bold">¥ {{ totalExpenses.toLocaleString() }}</div>
-                    <div class="text-[10px] mt-2 opacity-60 italic">約 HKD ${{ (totalExpenses * 0.05).toFixed(0) }}</div>
-                </div>
-                <i class="fas fa-coins absolute -right-4 -bottom-4 text-8xl opacity-10 rotate-12"></i>
+        <div v-if="currentTab === 'expenses'" class="pt-4">
+            <div class="bg-deep-sea p-6 rounded-[35px] text-white shadow-xl mb-6 relative overflow-hidden">
+                <p class="text-xs opacity-70 mb-1">Total Trip Expenses</p>
+                <div class="text-3xl font-black">¥ {{ totalExpenseJPY }}</div>
+                <div class="text-[10px] mt-2 bg-white/10 inline-block px-3 py-1 rounded-full">約 HKD ${{ (totalExpenseJPY * 0.05).toFixed(0) }}</div>
+                <i class="fas fa-coins absolute -right-4 -bottom-4 text-7xl opacity-10 rotate-12"></i>
             </div>
-
+            
             <div class="space-y-3">
-                <div v-for="(exp, idx) in expenses" :key="idx" class="bg-white p-4 rounded-2xl shadow-sm flex items-center justify-between border-b border-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-bg-light flex items-center justify-center text-deep-sea">
-                            <i :class="getCategoryIcon(exp.category)"></i>
+                <div v-for="(exp, idx) in expenses" :key="idx" class="bg-white p-4 rounded-2xl shadow-sm border border-gray-50 flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-bg-blue flex items-center justify-center text-deep-sea">
+                            <i :class="getCatIcon(exp.category)"></i>
                         </div>
                         <div>
-                            <div class="text-sm font-bold">{{ exp.name }}</div>
-                            <div class="text-[10px] text-gray-400">{{ exp.date }} · {{ exp.payment }}</div>
+                            <p class="text-xs font-bold">{{ exp.name }}</p>
+                            <p class="text-[9px] text-gray-400">{{ exp.date }} · {{ exp.payment }}</p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="text-sm font-bold text-red-500">-¥{{ exp.amount }}</div>
-                        <div class="text-[9px] text-gray-400">{{ exp.category }}</div>
+                        <p class="text-xs font-bold text-red-500">¥{{ exp.amount }}</p>
+                        <p class="text-[9px] text-gray-300">{{ exp.category }}</p>
                     </div>
                 </div>
             </div>
-            <button @click="openModal('expense')" class="fixed bottom-6 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40">
+            <button @click="openExpenseAdd" class="fixed bottom-24 right-6 w-14 h-14 bg-deep-sea text-white rounded-full shadow-2xl flex items-center justify-center text-xl z-30">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
 
-        <div v-show="currentTab === 'translate'" class="py-4 pb-20">
-            <div class="mb-6">
-                <button @click="openGoogleLens" class="w-full bg-deep-sea text-white p-4 rounded-2xl shadow-lg flex items-center justify-center gap-3 font-bold transition-transform active:scale-95">
-                    <i class="fas fa-camera text-xl"></i>
-                    開啟 Google 智慧鏡頭 (翻譯相片)
-                </button>
-                <p class="text-[10px] text-gray-400 mt-2 text-center">適用於 iOS / Android 快速開啟鏡頭翻譯</p>
+        <div v-if="currentTab === 'translate'" class="space-y-4 pt-4">
+            <div @click="openGoogleLens" class="bg-white p-5 rounded-3xl shadow-md flex items-center justify-between border-2 border-sea-blue/20 cursor-pointer active:scale-95 transition-all">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 to-green-400 flex items-center justify-center text-white text-xl">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-deep-sea">Google APP 智慧鏡頭</p>
+                        <p class="text-[10px] text-gray-400">快速翻譯標籤與說明文字</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-300"></i>
             </div>
 
             <div class="grid grid-cols-1 gap-3">
-                <div v-for="phrase in phrases" @click="activePhrase = phrase" class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center active:bg-gray-50 transition-colors">
+                <div v-for="(phrase, idx) in phrases" :key="idx" @click="activePhrase = phrase" 
+                     class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 active:bg-gray-50 flex justify-between items-center">
                     <div>
-                        <div class="text-sm font-bold text-deep-sea">{{ phrase.jp }}</div>
-                        <div class="text-xs text-gray-500">{{ phrase.zh }}</div>
+                        <p class="text-xs font-bold text-deep-sea">{{ phrase.jp }}</p>
+                        <p class="text-[10px] text-gray-400">{{ phrase.zh }}</p>
                     </div>
-                    <i class="fas fa-expand-alt text-sea-blue/40 text-xs"></i>
+                    <i class="fas fa-volume-up text-sea-blue/30 text-xs"></i>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <div v-if="activePhrase" @click="activePhrase = null" class="fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-6 backdrop-blur-sm">
-                <div class="bg-white w-full rounded-3xl p-8 text-center animate-in zoom-in duration-300">
-                    <div class="text-xs text-sea-blue font-bold mb-4">展示給店員看</div>
-                    <div class="text-3xl font-bold text-deep-sea mb-6 leading-relaxed">{{ activePhrase.jp }}</div>
-                    <div class="h-px bg-gray-100 w-full mb-6"></div>
-                    <div class="text-lg text-gray-600 mb-2">{{ activePhrase.zh }}</div>
-                    <div class="text-sm text-accent-orange font-mono">{{ activePhrase.romaji }}</div>
-                    <div class="mt-8 text-[10px] text-gray-400 uppercase tracking-widest">點擊任意處關閉</div>
+    <div v-if="activePhrase" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-6 backdrop-blur-sm" @click="activePhrase = null">
+        <div class="bg-white rounded-[40px] p-8 w-full max-w-sm text-center shadow-2xl" @click.stop>
+            <p class="text-[10px] font-bold text-accent-orange uppercase tracking-widest mb-4">Show to staff</p>
+            <h2 class="text-3xl font-bold text-deep-sea mb-6 leading-relaxed">{{ activePhrase.jp }}</h2>
+            <div class="h-px bg-gray-100 w-full mb-6"></div>
+            <p class="text-lg text-gray-600 mb-2">{{ activePhrase.zh }}</p>
+            <p class="text-sm font-mono text-sea-blue">{{ activePhrase.en }}</p>
+            <button @click="activePhrase = null" class="mt-8 text-gray-400 text-xs font-bold uppercase underline">Close</button>
+        </div>
+    </div>
+
+    <div v-if="itineraryModal" class="fixed inset-0 bg-black/50 z-[100] flex items-end justify-center">
+        <div class="bg-white w-full rounded-t-[40px] p-8 max-h-[85vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-deep-sea">{{ isEdit ? '編輯行程' : '新增行程' }}</h3>
+                <button @click="itineraryModal = false" class="text-gray-300 hover:text-red-500"><i class="fas fa-times-circle text-2xl"></i></button>
+            </div>
+            
+            <div class="space-y-5">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">行程名稱</label>
+                    <input v-model="formItem.name" class="w-full bg-gray-100 rounded-2xl p-4 outline-none focus:ring-2 ring-sea-blue">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">時間</label>
+                        <input type="time" v-model="formItem.time" class="w-full bg-gray-100 rounded-2xl p-4 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">分類</label>
+                        <select v-model="formItem.category" class="w-full bg-gray-100 rounded-2xl p-4 outline-none">
+                            <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">營業時間</label>
+                        <input v-model="formItem.hours" placeholder="e.g. 09:00-18:00" class="w-full bg-gray-100 rounded-2xl p-4 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">交通 (到此項所需)</label>
+                        <select v-model="formItem.transport" class="w-full bg-gray-100 rounded-2xl p-4 outline-none">
+                            <option value="walk">步行</option>
+                            <option value="drive">開車</option>
+                            <option value="transit">大眾運輸</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">Map Code</label>
+                        <input v-model="formItem.mapcode" class="w-full bg-gray-100 rounded-2xl p-4 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">門票 / 費用</label>
+                        <input v-model="formItem.ticket" placeholder="e.g. ¥1500" class="w-full bg-gray-100 rounded-2xl p-4 outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 block mb-1 uppercase">特色 / 備註</label>
+                    <textarea v-model="formItem.note" class="w-full bg-gray-100 rounded-2xl p-4 outline-none h-20"></textarea>
+                </div>
+
+                <div class="flex space-x-3 pt-4">
+                    <button v-if="isEdit" @click="confirmDelete" class="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center shadow-inner">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button @click="saveItinerary" class="flex-1 bg-deep-sea text-white font-bold py-4 rounded-2xl shadow-lg">儲存行程</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <div v-if="modals.itinerary" class="fixed inset-0 bg-black/50 z-[100] flex items-end sm:items-center justify-center">
-        <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-in slide-in-from-bottom duration-300">
-            <h3 class="font-bold text-lg mb-4">{{ isEdit ? '編輯行程' : '新增行程' }}</h3>
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="col-span-2">
-                    <label class="text-[10px] text-gray-400">行程名稱</label>
-                    <input v-model="form.name" class="w-full bg-bg-light rounded-xl p-3 text-sm outline-none">
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400">類別</label>
-                    <select v-model="form.type" class="w-full bg-bg-light rounded-xl p-3 text-sm outline-none">
-                        <option value="attraction">景點</option>
-                        <option value="food">美食</option>
-                        <option value="accommodation">住宿</option>
-                        <option value="shopping">購物</option>
-                        <option value="flight">航班</option>
-                        <option value="other">其他</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] text-gray-400">時間 (HH:mm)</label>
-                    <input v-model="form.time" type="time" class="w-full bg-bg-light rounded-xl p-3 text-sm outline-none">
-                </div>
-                <div class="col-span-2">
-                    <label class="text-[10px] text-gray-400">備註 / 特色</label>
-                    <textarea v-model="form.note" class="w-full bg-bg-light rounded-xl p-3 text-sm outline-none h-20"></textarea>
-                </div>
-            </div>
-            <div class="flex gap-3">
-                <button v-if="isEdit" @click="deleteItem" class="flex-1 bg-red-50 text-red-500 font-bold p-3 rounded-xl">刪除</button>
-                <button @click="modals.itinerary = false" class="flex-1 bg-gray-100 text-gray-400 p-3 rounded-xl">取消</button>
-                <button @click="saveItem" class="flex-[2] bg-deep-sea text-white font-bold p-3 rounded-xl">儲存變更</button>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <script>
@@ -379,123 +395,159 @@
             const currentTab = ref('itinerary');
             const selectedDateIndex = ref(0);
             const activePhrase = ref(null);
-            
-            // 日期產生 (5/22 - 5/31)
-            const dates = [
-                { week: 'Fri', day: '22/5' }, { week: 'Sat', day: '23/5' },
-                { week: 'Sun', day: '24/5' }, { week: 'Mon', day: '25/5' },
-                { week: 'Tue', day: '26/5' }, { week: 'Wed', day: '27/5' },
-                { week: 'Thu', day: '28/5' }, { week: 'Fri', day: '29/5' },
-                { week: 'Sat', day: '30/5' }, { week: 'Sun', day: '31/5' }
+            const itineraryModal = ref(false);
+            const isEdit = ref(false);
+            const editIdx = ref(null);
+
+            const tabs = [
+                { id: 'itinerary', icon: 'fas fa-map-marker-alt' },
+                { id: 'info', icon: 'fas fa-info-circle' },
+                { id: 'shopping', icon: 'fas fa-shopping-basket' },
+                { id: 'expenses', icon: 'fas fa-yen-sign' },
+                { id: 'translate', icon: 'fas fa-language' }
             ];
 
-            // 初始數據 (完整行程)
-            const allItineraries = ref({
+            const dates = [
+                { week: 'Fri', dayNum: '22', date: '2026/05/22', loc: 'Yokohama' },
+                { week: 'Sat', dayNum: '23', date: '2026/05/23', loc: 'Kamakura' },
+                { week: 'Sun', dayNum: '24', date: '2026/05/24', loc: 'Atami' },
+                { week: 'Mon', dayNum: '25', date: '2026/05/25', loc: 'Ito' },
+                { week: 'Tue', dayNum: '26', date: '2026/05/26', loc: 'Mishima' },
+                { week: 'Wed', dayNum: '27', date: '2026/05/27', loc: 'Hakone' },
+                { week: 'Thu', dayNum: '28', date: '2026/05/28', loc: 'Gotemba' },
+                { week: 'Fri', dayNum: '29', date: '2026/05/29', loc: 'Ikebukuro' },
+                { week: 'Sat', dayNum: '30', date: '2026/05/30', loc: 'Tokyo' },
+                { week: 'Sun', dayNum: '31', date: '2026/05/31', loc: 'Haneda' }
+            ];
+
+            // 初始假數據
+            const itineraryData = ref({
                 0: [
-                    { id: 1, type: 'flight', time: '10:35', endTime: '16:05', name: 'HKG -> NRT', from: 'HKG', to: 'NRT', flightNo: 'UO870', transportType: 'transit', transitTime: '-' },
-                    { id: 2, type: 'transit', time: '17:48', name: '乘搭成田特快到橫濱', transportType: 'transit', transitTime: '1hr 43m' },
-                    { id: 3, type: 'accommodation', time: '19:30', name: 'Check in Plumm飯店', transportType: 'walk', transitTime: '10m' },
-                    { id: 4, type: 'food', time: '20:00', name: '晚餐時間', transportType: 'walk', transitTime: '5m' }
+                    { id: 1, time: '10:35', name: 'UO870 HKG - NRT', category: '航班', transport: 'transit', transitTime: '08:30 到達機場' },
+                    { id: 2, time: '17:48', name: '成田特快 (NEX)', category: '其他', transport: 'transit', transitTime: '103m', note: '往橫濱站' },
+                    { id: 3, time: '19:30', name: 'Plumm飯店', category: '住宿', transport: 'walk', transitTime: '10m', note: 'Check in' },
+                    { id: 4, time: '20:00', name: '橫濱晚餐', category: '美食', transport: 'walk', transitTime: '5m' }
                 ],
                 1: [
-                    { id: 5, type: 'attraction', time: '09:00', name: '鎌倉站', transportType: 'transit', transitTime: '45m' },
-                    { id: 6, type: 'attraction', time: '09:15', name: '錢洗弁財天宇賀福神社', transportType: 'walk', transitTime: '15m' },
-                    { id: 7, type: 'food', time: '11:30', name: '小町通 Lunch', transportType: 'walk', transitTime: '10m' },
-                    { id: 8, type: 'attraction', time: '14:30', name: '鎌倉高校前平交道', transportType: 'transit', transitTime: '20m', note: '海邊漫步' },
-                    { id: 9, type: 'food', time: '20:15', name: '中華街 Dinner', transportType: 'transit', transitTime: '45m' }
-                ],
-                // ... 篇幅關係，開發者可根據 Prompt 中的行程資訊繼續填入剩餘天數
+                    { id: 5, time: '09:00', name: '鎌倉站', category: '其他', transport: 'transit', transitTime: '45m' },
+                    { id: 6, time: '09:15', name: '錢洗弁財天', category: '景點', transport: 'walk', transitTime: '15m', ticket: 'Free' },
+                    { id: 7, time: '14:30', name: '鎌倉高校前', category: '景點', transport: 'transit', transitTime: '20m', feature: '平交道 & 海邊' }
+                ]
             });
 
-            const currentDayItinerary = computed(() => {
-                return allItineraries.value[selectedDateIndex.value] || [];
+            const currentItinerary = computed(() => itineraryData.value[selectedDateIndex.value] || []);
+            
+            // 天氣邏輯 (模擬 WeatherNews.jp)
+            const currentWeather = computed(() => {
+                const city = dates[selectedDateIndex.value].loc;
+                const weatherMap = {
+                    'Yokohama': { icon: 'fas fa-sun', temp: 22, feel: 24, loc: 'Yokohama' },
+                    'Kamakura': { icon: 'fas fa-sun', temp: 21, feel: 23, loc: 'Kamakura' },
+                    'Atami': { icon: 'fas fa-cloud-sun', temp: 24, feel: 26, loc: 'Atami' },
+                    'Ito': { icon: 'fas fa-cloud', temp: 20, feel: 19, loc: 'Ito' },
+                    'Hakone': { icon: 'fas fa-cloud-rain', temp: 18, feel: 17, loc: 'Hakone' },
+                    'Tokyo': { icon: 'fas fa-sun', temp: 25, feel: 27, loc: 'Tokyo' }
+                };
+                return weatherMap[city] || weatherMap['Tokyo'];
             });
-
-            // 天氣 (模擬自動抓取)
-            const weather = ref({ location: 'Shizuoka, Japan', temp: 22, feel: 24, icon: 'fas fa-cloud-sun' });
 
             // 匯率
             const fx = ref({ jpy: 10000, hkd: 500 });
-            const convertCurrency = (type) => {
-                const rate = 0.0495; // 模擬匯率
-                if(type === 'jpy') fx.value.hkd = (fx.value.jpy * rate).toFixed(2);
-                else fx.value.jpy = (fx.value.hkd / rate).toFixed(0);
-            };
+            const rate = 0.051; // 1 JPY = 0.051 HKD
+            const convertToHKD = () => fx.value.hkd = (fx.value.jpy * rate).toFixed(0);
+            const convertToJPY = () => fx.value.jpy = (fx.value.hkd / rate).toFixed(0);
+
+            // 住宿資訊
+            const hotels = [
+                { name: 'Plumm飯店', dateRange: '22/05-24/05', address: '1 Chome-2-8 Kitasaiwai, Nishi Ward, Yokohama' },
+                { name: '格蘭度假優雅熱海酒店', dateRange: '24/05-25/05', address: 'Atami, Shizuoka' },
+                { name: '望水日式旅館', dateRange: '25/05-26/05', address: 'Shizuoka Prefecture, Ito' },
+                { name: '季の湯 雪月花', dateRange: '26/05-28/05', address: 'Hakone, Ashigarashimo' },
+                { name: '太陽城王子大飯店', dateRange: '28/05-30/05', address: 'Ikebukuro, Tokyo' }
+            ];
 
             // 翻譯句子
             const phrases = [
-                { jp: 'すみません', zh: '不好意思 / 請問', romaji: 'Sumimasen' },
-                { jp: 'これをください', zh: '請給我這個', romaji: 'Kore o kudasai' },
-                { jp: 'おすすめは何ですか？', zh: '有什麼推薦的嗎？', romaji: 'Osusume wa nan desu ka?' },
-                { jp: 'お会計をお願いします', zh: '請幫我買單', romaji: 'Okaikei o onegaishimasu' },
-                { jp: '免税できますか？', zh: '可以免稅嗎？', romaji: 'Menzei dekimasu ka?' },
-                { jp: 'カードでお願いします', zh: '我想用刷卡的', romaji: 'Kaado de onegaishimasu' }
-            ];
-
-            // 住宿
-            const hotels = [
-                { name: 'Plumm飯店', dates: '22/05-24/05', tel: '+81 45-314-3111' },
-                { name: '格蘭度假優雅熱海酒店', dates: '24/05-25/05', tel: '+81 557-82-1211' },
-                { name: '望水日式旅館', dates: '25/05-26/05', tel: '+81 557-23-1230' },
-                { name: '季の湯 雪月花', dates: '26/05-28/05', tel: '+81 460-86-1333' },
-                { name: '太陽城王子大飯店', dates: '28/05-30/05', tel: '+81 3-3988-1111' }
+                { jp: 'すみません', zh: '不好意思 / 請問', en: 'Su-mi-ma-sen' },
+                { jp: 'これをください', zh: '請給我這個', en: 'Ko-re o ku-da-sai' },
+                { jp: 'おすすめは何ですか？', zh: '有什麼推薦的嗎？', en: 'O-su-su-me wa nan desu ka?' },
+                { jp: 'お会計をお願いします', zh: '請幫我結帳', en: 'O-kai-kei o o-ne-gai-shi-ma-su' },
+                { jp: '免税できますか？', zh: '可以免稅嗎？', en: 'Men-zei de-ki-ma-su ka?' },
+                { jp: 'カードでお願いします', zh: '我想用信用卡付帳', en: 'Kaa-do de o-ne-gai-shi-ma-su' },
+                { jp: '袋いりますか？大丈夫です', zh: '需要袋子嗎？不用的。', en: 'Fu-ku-ro i-ri-ma-su ka? Dai-jo-bu desu' }
             ];
 
             // 花費
             const expenses = ref([
-                { category: 'transport', name: 'NEX 成田特快', amount: 4000, payment: '信用卡', date: '2026-05-22' }
+                { category: '交通', name: 'NEX 往返券', date: '2026-05-22', amount: 5000, payment: '信用卡' },
+                { category: '美食', name: '池袋沾麵', date: '2026-05-29', amount: 1500, payment: '現金' }
             ]);
-            const totalExpenses = computed(() => expenses.value.reduce((s, e) => s + Number(e.amount), 0));
+            const totalExpenseJPY = computed(() => expenses.value.reduce((sum, item) => sum + item.amount, 0));
 
             // 購物
-            const shoppingList = ref([
-                { name: '休足時間', img: 'https://m.media-amazon.com/images/I/71R9G0ZlRTL.jpg' },
-                { name: '東京芭娜娜', img: 'https://www.tokyobanana.jp/products/images/banana_main.jpg' }
+            const shoppingItems = ref([
+                { name: '藥妝 - 護手霜', image: '' },
+                { name: 'Loft 文具', image: '' }
             ]);
 
-            // 拖曳排序
-            let dragIdx = null;
-            const onDragStart = (e, idx) => { dragIdx = idx; e.target.classList.add('dragging'); };
-            const onDrop = (e, idx) => {
-                const list = allItineraries.value[selectedDateIndex.value];
-                const item = list.splice(dragIdx, 1)[0];
-                list.splice(idx, 0, item);
-                e.target.classList.remove('dragging');
-            };
-
-            // 功能方法
-            const openGoogleMap = (q) => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`, '_blank');
-            const openGoogleLens = () => window.open('googleapp://googlelens', '_blank'); // 嘗試開啟APP，若無則跳轉網頁版由OS處理
-
-            // Modal 控制
-            const modals = ref({ itinerary: false, shopping: false, expense: false });
-            const form = ref({});
-            const isEdit = ref(false);
-            const openModal = (type) => {
+            // 表單控制
+            const categories = ['景點', '住宿', '美食', '購物', '航班', '其他'];
+            const formItem = ref({});
+            
+            const openAddModal = () => {
                 isEdit.value = false;
-                form.value = { type: 'attraction', name: '', time: '10:00' };
-                modals.value[type] = true;
+                formItem.value = { category: '景點', transport: 'walk', time: '10:00' };
+                itineraryModal.value = true;
             };
-            const saveItem = () => { modals.value.itinerary = false; /* 實作儲存邏輯 */ };
-            const deleteItem = () => { if(confirm('確定要刪除嗎？')) { /* 實作刪除 */ modals.value.itinerary = false; } };
 
-            // UI Helpers
-            const getCategoryIcon = (t) => ({ attraction: 'fa-camera', food: 'fa-utensils', accommodation: 'fa-bed', shopping: 'fa-shopping-bag', flight: 'fa-plane', transport: 'fa-train' }[t] || 'fa-star');
-            const getCategoryBg = (t) => ({ attraction: 'bg-green-500', food: 'bg-accent-orange', accommodation: 'bg-indigo-500', shopping: 'bg-pink-500', flight: 'bg-deep-sea' }[t] || 'bg-gray-500');
-            const getCategoryBorder = (t) => ({ attraction: 'border-green-500', food: 'border-accent-orange', accommodation: 'border-indigo-500', shopping: 'border-pink-500' }[t] || 'border-gray-200');
-            const getTransportIcon = (t) => ({ walk: 'fas fa-walking', drive: 'fas fa-car' }[t] || 'fas fa-subway');
-            const getCategoryName = (t) => ({ attraction: '景點', food: '美食', accommodation: '住宿', shopping: '購物', flight: '航班' }[t] || '其他');
+            const openEditModal = (item, idx) => {
+                isEdit.value = true;
+                editIdx.value = idx;
+                formItem.value = { ...item };
+                itineraryModal.value = true;
+            };
 
-            onMounted(() => convertCurrency('jpy'));
+            const saveItinerary = () => {
+                if (!itineraryData.value[selectedDateIndex.value]) itineraryData.value[selectedDateIndex.value] = [];
+                const dayList = itineraryData.value[selectedDateIndex.value];
+                
+                if (isEdit.value) {
+                    dayList[editIdx.value] = { ...formItem.value };
+                } else {
+                    formItem.value.id = Date.now();
+                    dayList.push({ ...formItem.value });
+                }
+                dayList.sort((a, b) => a.time.localeCompare(b.time));
+                itineraryModal.value = false;
+            };
+
+            const confirmDelete = () => {
+                if (confirm('確定要刪除這個行程嗎？')) {
+                    itineraryData.value[selectedDateIndex.value].splice(editIdx.value, 1);
+                    itineraryModal.value = false;
+                }
+            };
+
+            // Helper Methods
+            const openNav = (q) => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`, '_blank');
+            const openGoogleLens = () => window.location.href = 'googleapp://googlelens';
+            
+            const getCatIcon = (cat) => ({ '景點': 'fa-camera', '住宿': 'fa-bed', '美食': 'fa-utensils', '購物': 'fa-shopping-bag', '航班': 'fa-plane' }[cat] || 'fa-map-pin');
+            const getCatColor = (cat) => ({ '景點': 'bg-green-500', '住宿': 'bg-indigo-500', '美食': 'bg-accent-orange', '購物': 'bg-pink-500', '航班': 'bg-deep-sea' }[cat] || 'bg-sea-blue');
+            const getTransportIcon = (t) => ({ walk: 'fa-walking', drive: 'fa-car', transit: 'fa-train' }[t] || 'fa-walking');
+
+            onMounted(() => { convertToHKD(); });
 
             return {
-                currentTab, dates, selectedDateIndex, allItineraries, currentDayItinerary,
-                weather, fx, convertCurrency, phrases, activePhrase, hotels, expenses, totalExpenses, shoppingList,
-                onDragStart, onDrop, openGoogleMap, openGoogleLens, modals, form, isEdit, openModal, saveItem, deleteItem,
-                getCategoryIcon, getCategoryBg, getCategoryBorder, getTransportIcon, getCategoryName
+                currentTab, tabs, dates, selectedDateIndex, itineraryData, currentItinerary,
+                currentWeather, fx, convertToHKD, convertToJPY, hotels, phrases, activePhrase,
+                expenses, totalExpenseJPY, shoppingItems, itineraryModal, formItem, categories,
+                isEdit, openAddModal, openEditModal, saveItinerary, confirmDelete,
+                openNav, openGoogleLens, getCatIcon, getCatColor, getTransportIcon
             };
         }
     }).mount('#app');
 </script>
+
 </body>
 </html>
