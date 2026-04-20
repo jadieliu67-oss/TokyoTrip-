@@ -734,7 +734,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     { id: 302, name: '抵達「熱海站」', category: 'transport', startTime: '11:00', address: '熱海站', note: '踴子 3特急伊豆急下田 09:59am', hours: null, price: '¥2,430/成人', transportType: 'public', travelTime: '1h', isNoteExpanded: false },
                     { id: 303, name: '到酒店放低行李', category: 'accommodation', startTime: '11:30', address: '格蘭度假優雅熱海酒店', note: '在車站打電話給酒店接送', hours: null, price: null, transportType: 'car', travelTime: '10m', isNoteExpanded: false },
                     { id: 304, name: '午餐 (熱海站前「平和通商店街」)', category: 'food', startTime: '11:45', address: '熱海站前「平和通商店街」', note: null, hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
-                    { id: 305, name: '着物レンタルあき PETIT', category: 'sightseeing', startTime: '14:00', address: '着物レンタルあき PETIT', note: null', hours: null, price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
+                    { id: 305, name: '着物レンタルあき PETIT', category: 'sightseeing', startTime: '14:00', address: '着物レンタルあき PETIT', note: null, hours: null, price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
                     { id: 306, name: '來宮神社', category: 'sightseeing', startTime: '15:00', address: '來宮神社', note: null, hours: null, price: null, transportType: 'public', travelTime: '10m', isNoteExpanded: false },
                     { id: 307, name: '起雲閣', category: 'sightseeing', startTime: '16:30', address: '起雲閣', note: null, hours: '9:00-17:00', price: null, transportType: 'walk', travelTime: '15m', isNoteExpanded: false },
                     { id: 308, name: '熱海銀座商店街 & 行祭典', category: 'shopping', startTime: '17:30', address: '熱海銀座商店街', note: null, hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
@@ -745,7 +745,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                 ],
                 // Day 4: 25/05/2026
                 [
-                    { id: 401, name: '格蘭度假優雅熱海酒店出發', category: 'accommodation', startTime: '09:00', address: '格蘭度假優雅熱海酒店', note: null, hours: null price: null, transportType: null, travelTime: null, isNoteExpanded: false },
+                    { id: 401, name: '格蘭度假優雅熱海酒店出發', category: 'accommodation', startTime: '09:00', address: '格蘭度假優雅熱海酒店', note: null, hours: null, price: null, transportType: null, travelTime: null, isNoteExpanded: false },
                     { id: 402, name: '搭乘 JR 伊東線', category: 'transport', startTime: '09:20', address: '熱海站', note: '大概20-25分鐘一班', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
                     { id: 403, name: '抵達伊東站', category: 'transport', startTime: '09:50', address: '伊東站', note: 'JR 伊東線', hours: null, price: null, transportType: 'public', travelTime: '30m', isNoteExpanded: false },
                     { id: 404, name: 'Nippon Rent-A-Car 伊東站前店取車', category: 'transport', startTime: '10:00', address: 'ニッポンレンタカー伊東駅前営業所', note: null, hours: '08:00-19:00', price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
@@ -794,7 +794,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     { id: 803, name: '世界啤酒博物館', category: 'sightseeing', startTime: '14:30', address: '世界のビール博物館 東京スカイツリータウン・ソラマチ店', note: null, hours: null, price: null, transportType: 'public', travelTime: '1h', isNoteExpanded: false },
                     { id: 804, name: 'Animate アニメイト池袋本店', category: 'shopping', startTime: '16:30', address: 'Animate アニメイト池袋本店', note: null, hours: null, price: null, transportType: 'public', travelTime: '1h', isNoteExpanded: false },
                     { id: 805, name: '晚餐 (燒肉)', category: 'food', startTime: '19:30', address: null, note: null, hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
-                    { id: 806, name: '東京 Bar', category: 'food', startTime: '21:30', address: null, note: 'null, hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
+                    { id: 806, name: '東京 Bar', category: 'food', startTime: '21:30', address: null, note: null, hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
                     { id: 807, name: '回酒店／夾公仔', category: 'sightseeing', startTime: '22:30', address: null, note: null, hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
                 ],
                 // Day 9: 30/05/2026
@@ -844,6 +844,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             const showExpenseModal = ref(false);
             const showItineraryModal = ref(false);
             const isEditMode = ref(false); 
+            const activePhrase = ref(null);
             
             // 新增/編輯行程狀態
             const newItinerary = ref({
@@ -944,6 +945,8 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     alert('移動兩點間至少需要一個地點名稱或地址。');
                 }
             };
+
+            const openGoogleLens = () => window.location.href = 'googleapp://googlelens';
             
             // 浮動按鈕點擊處理
             const handleAddClick = () => {
