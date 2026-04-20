@@ -705,28 +705,30 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             const itineraryData = ref([
                 // Day 1: 22/05/2026
                 [
-                    { id: 101, name: '香港機場報到', category: 'flight', startTime: '06:00', address: '桃園國際機場 (TPE)', note: '中華航空 CI0130 08:35起飛', hours: null, price: null, transportType: 'flight', travelTime: null, isNoteExpanded: false },
-                    { id: 102, name: '新千歲機場 (CTS) 抵達', category: 'flight', startTime: '13:15', address: '新千歲機場', note: '領取行李與確認巴士站牌', hours: null, price: null, transportType: 'flight', travelTime: '4h40m', isNoteExpanded: false },
-                    { id: 103, name: '搭乘機場巴士至札幌', category: 'transport', startTime: '~14:30', address: '札幌大通東急STAY酒店', note: '國內線14, 22站台搭車，分直達/全達，車程約60-80分鐘。', hours: null, price: '約 ¥1,400/人', transportType: 'bus', travelTime: '1h30m', isNoteExpanded: false },
-                    { id: 104, name: '札幌大通東急STAY酒店 Check-in', category: 'accommodation', startTime: '~16:00', address: '札幌東急大通酒店', note: '完成住宿手續並稍作休息', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
-                    { id: 105, name: '晚餐 (湯咖哩)', category: 'food', startTime: '~17:00', address: 'Soup Curry GARAKU 或 奥芝商店 実家', note: '人氣：燉豬肉湯咖哩、嫩雞腿和蔬菜湯咖哩', hours: '17:00-20:30', price: null, transportType: 'walk', travelTime: '15m', isNoteExpanded: false },
-                    { id: 106, name: '大通公園 & 札幌電視塔', category: 'sightseeing', startTime: '~19:00', address: '大通公園 & 札幌電視塔', note: '欣賞夜景，電視塔觀景台高 90.38m。冬季有燈飾。', hours: '9:00-22:00 (電視塔)', price: '觀景台門票', transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
-                    { id: 107, name: '貍小路商店街', category: 'shopping', startTime: '~20:30', address: '貍小路商店街 (4-5丁目)', note: '藥妝、伴手禮採購。', hours: null, price: null, transportType: 'walk', travelTime: '15m', isNoteExpanded: false },
-                    { id: 108, name: '成吉思汗烤肉 (宵夜/晚餐)', category: 'food', startTime: '~21:30', address: '成吉思汗烤肉YUHI 薄野本店', note: '或是北海道ジンギスカンMASAJINすすきの本店', hours: '17:00–23:00/00:00', price: null, transportType: 'walk', travelTime: '15m', isNoteExpanded: false },
-                    { id: 109, name: '業務超市', category: 'shopping', startTime: '~22:30', address: '業務スーパー (大通西17条店)', note: '大份量、價格實惠，採購零食或隔日早餐', hours: '9:00–22:00', price: null, transportType: 'walk', travelTime: '20m', isNoteExpanded: false },
+                    { id: 101, name: '香港機場報到', category: 'flight', startTime: '08:00', address: '香港國際機場 (HKG)', note: '香港快運 UO870 10:35起飛', hours: null, price: null, transportType: 'flight', travelTime: null, isNoteExpanded: false },
+                    { id: 102, name: '東京成田機場 (NRT) 抵達', category: 'flight', startTime: '16:05', address: '東京成田機場', note: '領取行李與乘搭成田特快', hours: null, price: null, transportType: 'flight', travelTime: '4h30m', isNoteExpanded: false },
+                    { id: 103, name: '搭乘成田特快到橫濱', category: 'transport', startTime: '17:48', address: '橫濱駅', note: '指定座席 - 普通車廂，車程約1小時43分鐘。', hours: null, price: 'HK$ 220.0/人', transportType: 'public', travelTime: '1h30m', isNoteExpanded: false },
+                    { id: 104, name: 'Plumm飯店 Check-in', category: 'accommodation', startTime: '19:30', address: 'Plumm飯店', note: null, hours: null, price: null, transportType: 'walk', travelTime: '6m', isNoteExpanded: false },
+                    { id: 105, name: '晚餐', category: 'food', startTime: '20:30', address: null, note: null, hours: null, price: null, transportType: 'walk', travelTime: '15m', isNoteExpanded: false },
                 ],
-                // Day 2: 2/2 (一) 小樽
+                // Day 2: 23/05/2026
                 [
-                    { id: 201, name: '札幌市區取車', category: 'transport', startTime: '08:00', address: 'Nissan Rent a Car 札幌駅南口アスティ店', note: '租車日開始！', hours: null, price: null, transportType: 'walk', travelTime: '20m', isNoteExpanded: false },
-                    { id: 202, name: '小樽水族館', category: 'sightseeing', startTime: '09:00', address: '小樽水族館', note: '海獸樂園表演 (海豚/海獅) 11:00、企鵝散步 11:30 (冬季限定)。', hours: '9:00-16:00', price: '¥1,800/成人', transportType: 'car', travelTime: '55m', isNoteExpanded: false },
-                    { id: 203, name: '小樽水族館企鵝散步', category: 'sightseeing', startTime: '11:30', address: '小樽水族館', note: '冬季限定，企鵝會在雪地上散步。', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
-                    { id: 204, name: '午餐 (三角市場)', category: 'food', startTime: '~12:45', address: '三角市場 (滝波食堂/惠比壽櫻)', note: '新鮮海鮮丼飯，近 JR 小樽車站。 (備選: cafe BAAL 牛排飯)', hours: '8:00-17:00', price: null, transportType: 'car', travelTime: '15m', isNoteExpanded: false },
-                    { id: 205, name: '小樽堺町通り商店街', category: 'shopping', startTime: '~14:30', address: '小樽音樂盒堂本館/北一硝子/LeTAO總店', note: '北一硝子三號館煤油燈、蒸汽鐘報時、LeTAO雙層起司蛋糕。', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
-                    { id: 206, name: '天狗山纜車', category: 'sightseeing', startTime: '~16:30', address: '天狗山纜車', note: '觀賞小樽夜景的最佳地點 (北海道三大夜景之一)。約 15:00 上山', hours: '9:00-21:00', price: '¥1,800/成人', transportType: 'car', travelTime: '15m', isNoteExpanded: false },
-                    { id: 207, name: '晚餐', category: 'food', startTime: '~19:00', address: '小樽運河周邊餐廳', note: '在小樽用餐後再開車回札幌', hours: null, price: null, transportType: 'car', travelTime: '15m', isNoteExpanded: false },
-                    { id: 208, name: '返回札幌大通東急STAY酒店', category: 'accommodation', startTime: '~20:30', address: '札幌東急大通酒店', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
+                    { id: 201, name: 'Plumm飯店出發', category: 'accommodation', startTime: '08:25', address: 'Plumm飯店', note: null, hours: null, price: null, transportType: 'walk', travelTime: null, isNoteExpanded: false },
+                    { id: 202, name: '抵達「鎌倉站」', category: 'transport', startTime: '09:00', address: '鎌倉站', note: null, hours: null, price: null, transportType: 'public', travelTime: '35m', isNoteExpanded: false },
+                    { id: 203, name: '錢洗弁財天宇賀福神社', category: 'sightseeing', startTime: '09:15', address: '錢洗弁財天宇賀福神社', note: null, hours: null, price: null, transportType: 'walk', travelTime: '15m', isNoteExpanded: false },
+                    { id: 204, name: '鶴岡八幡宮', category: 'sightseeing', startTime: '10:45', address: '鶴岡八幡宮', note: null, hours: '6:00-20:00', price: null, transportType: 'walk', travelTime: '15m', isNoteExpanded: false },
+                    { id: 205, name: '午餐 (小町通)', category: 'food', startTime: '11:30', address: 'Giraffa Curry Pan', note: null, hours: null, price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
+                    { id: 206, name: '抵達「長谷站」', category: 'transport', startTime: '13:15', address: '長谷站', note: '觀賞小樽夜景的最佳地點 (北海道三大夜景之一)。約 15:00 上山', hours: '9:00-21:00', price: '¥1,800/成人', transportType: 'car', travelTime: '15m', isNoteExpanded: false },
+                    { id: 207, name: '鎌倉長谷寺', category: 'sightseeing', startTime: '13:20', address: '鎌倉長谷寺', note: '在小樽用餐後再開車回札幌', hours: null, price: null, transportType: 'car', travelTime: '15m', isNoteExpanded: false },
+                    { id: 208, name: '平交道 (鎌倉高校前) & 海邊漫步', category: 'sightseeing', startTime: '14:30', address: '平交道', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
+                    { id: 209, name: '江之島神社', category: 'sightseeing', startTime: '16:30', address: '江之島神社', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
+                    { id: 210, name: '龍戀之鐘 & 江之島燈塔', category: 'sightseeing', startTime: '17:30', address: '江之島燈塔', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
+                    { id: 211, name: '湘南單軌電車', category: 'transport', startTime: '19:00', address: '湘南江之島車站', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
+                    { id: 212, name: '回橫濱', category: 'transport', startTime: '19:45', address: '橫濱駅', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
+                    { id: 213, name: '晚餐 (中華街)', category: 'food', startTime: '20:15', address: '橫濱中華街', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
+                    { id: 214, name: '返回Plumm飯店', category: 'accommodation', startTime: '21:30', address: 'Plumm飯店', note: '休息準備隔日退房', hours: null, price: null, transportType: 'car', travelTime: '1h', isNoteExpanded: false },
                 ],
-                // Day 3: 2/3 (二) 旭川 & 美瑛 & 富良野
+                // Day 3: 24/05/2026
                 [
                     { id: 301, name: '早餐 (Sandria三明治)', category: 'food', startTime: '08:00', address: 'Sandria三明治 (札幌市區)', note: '雙倍蛋沙拉、炸蝦三明治，外帶車上享用。', hours: '24小時', price: null, transportType: 'car', travelTime: '15m', isNoteExpanded: false },
                     { id: 302, name: '旭山動物園', category: 'sightseeing', startTime: '09:30', address: '旭山動物園', note: '冬季營業時間 10:30-15:30。必看冬季限定企鵝散步、北極熊館。', hours: '10:30-15:30 (冬季)', price: '¥1,000/成人', transportType: 'car', travelTime: '2h', isNoteExpanded: false },
@@ -737,7 +739,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     { id: 307, name: 'COOP超市 & Seicomart', category: 'shopping', startTime: '~20:30', address: 'COOP超市 / Seicomart', note: 'Seicomart 的 Hot Chef 熟食和 Secoma 自有品牌。', hours: null, price: null, transportType: 'car', travelTime: '10m', isNoteExpanded: false },
                     { id: 308, name: '富良野ホテル Check-in', category: 'accommodation', startTime: '~21:30', address: '富良野ホテル (Furano Hotel)', note: '本日住宿：富良野', hours: null, price: null, transportType: 'car', travelTime: '10m', isNoteExpanded: false },
                 ],
-                // Day 4: 2/4 (三) 登別溫泉
+                // Day 4: 25/05/2026
                 [
                     { id: 401, name: '白色戀人工廠', category: 'sightseeing', startTime: '09:00', address: '白い恋人パーク', note: '歐式庭園，參觀餅乾生產線，可 DIY 體驗。', hours: '10:00-19:00', price: '¥800/成人', transportType: 'car', travelTime: '2h30m', isNoteExpanded: false },
                     { id: 402, name: '午餐 (牛津巧克力酒廊)', category: 'food', startTime: '~12:00', address: '白色戀人工廠內', note: '或在前往下一個景點途中用餐', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
@@ -747,7 +749,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     { id: 406, name: '閻魔堂地獄審判', category: 'sightseeing', startTime: '~19:30', address: '閻魔堂', note: '溫泉街上的閻羅王變臉秀表演。', hours: null, price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
                     { id: 407, name: '登別溫泉街', category: 'shopping', startTime: '~20:30', address: '登別溫泉街', note: '逛街、買伴手禮、免費足湯。', hours: null, price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
                 ],
-                // Day 5: 2/5 (四) 登別
+                // Day 5: 26/05/2026
                 [
                     { id: 501, name: '尼克斯海洋公園', category: 'sightseeing', startTime: '09:30', address: '登別尼克斯海洋公園', note: '歐洲城堡水族館、企鵝遊行、海豚海獅表演。', hours: '9:00-17:00', price: '¥3,000/成人', transportType: 'car', travelTime: '10m', isNoteExpanded: false },
                     { id: 502, name: '尼克斯海洋公園 企鵝遊行', category: 'sightseeing', startTime: '11:00', address: '登別尼克斯海洋公園', note: '企鵝會在園區內大搖大擺散步。', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
@@ -757,7 +759,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     { id: 506, name: '晚餐 (旅館內) / 溫泉休息', category: 'food', startTime: '~18:00', address: '登別溫泉第一瀧本館', note: '本日繼續享受溫泉', hours: null, price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
                     { id: 507, name: '鬼火之路', category: 'sightseeing', startTime: '~20:00', address: '登別地獄谷', note: '夜晚步道兩側點燈，營造奇幻氛圍', hours: null, price: '免費', transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
                 ],
-                // Day 6: 2/6 (五) 札幌
+                // Day 6: 27/05/2026
                 [
                     { id: 601, name: '羊之丘展望台', category: 'sightseeing', startTime: '09:00', address: 'さっぽろ羊ヶ丘展望台', note: '與克拉克博士雕像合影。冬季可玩雪。', hours: null, price: '¥1,000/成人', transportType: 'car', travelTime: '1h', isNoteExpanded: false },
                     { id: 602, name: '午餐 (羊之丘)', category: 'food', startTime: '~12:00', address: '羊之丘休息屋', note: '可品嚐成吉思汗烤肉或白色戀人冰淇淋。', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
@@ -766,7 +768,34 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     { id: 605, name: '札幌西三井花園飯店 Check-in', category: 'accommodation', startTime: '~20:00', address: '札幌西三井花園飯店', note: '本日住宿：札幌', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
                     { id: 606, name: '晚餐 (串鳥)', category: 'food', startTime: '~20:30', address: '串鳥 札幌駅北口店', note: '人氣餐點：雞肉串、豬肉串、豬五花蘆筍捲。', hours: '16:30–23:30', price: null, transportType: 'walk', travelTime: '5m', isNoteExpanded: false },
                 ],
-                // Day 7: 2/7 (六) 回家
+                // Day 7: 28/05/2026
+                [
+                    { id: 701, name: '早餐 (飯店/札幌車站周邊)', category: 'food', startTime: '08:00', address: '札幌車站周邊', note: '享用早餐', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
+                    { id: 702, name: '前往新千歲機場 (JR/巴士)', category: 'transport', startTime: '09:30', address: '新千歲機場', note: '搭乘 JR 或機場巴士，預計 11:30 報到。', hours: null, price: null, transportType: 'public', travelTime: '40m-1h', isNoteExpanded: false },
+                    { id: 703, name: '機場報到/托運行李', category: 'flight', startTime: '11:30', address: '新千歲機場 (CTS)', note: '預計 11:30 報到', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
+                    { id: 704, name: '午餐 (一幻拉麵)', category: 'food', startTime: '~12:30', address: '一幻拉麵 (國內線航廈)', note: '推薦濃厚蝦湯頭搭配粗麵。', hours: '9:00-21:00', price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
+                    { id: 705, name: '機場購物/候機', category: 'shopping', startTime: '~13:30', address: '新千歲機場', note: '國內線航廈伴手禮店、多啦A夢樂園、Royce\' Chocolate World。', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
+                    { id: 706, name: '新千歲機場起飛 (CI0131)', category: 'flight', startTime: '14:30', address: '桃園國際機場 (TPE)', note: '預計 18:15 抵達桃園', hours: null, price: null, transportType: 'flight', travelTime: '3h45m', isNoteExpanded: false },
+                ],
+                // Day 8: 29/05/2026
+                [
+                    { id: 701, name: '早餐 (飯店/札幌車站周邊)', category: 'food', startTime: '08:00', address: '札幌車站周邊', note: '享用早餐', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
+                    { id: 702, name: '前往新千歲機場 (JR/巴士)', category: 'transport', startTime: '09:30', address: '新千歲機場', note: '搭乘 JR 或機場巴士，預計 11:30 報到。', hours: null, price: null, transportType: 'public', travelTime: '40m-1h', isNoteExpanded: false },
+                    { id: 703, name: '機場報到/托運行李', category: 'flight', startTime: '11:30', address: '新千歲機場 (CTS)', note: '預計 11:30 報到', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
+                    { id: 704, name: '午餐 (一幻拉麵)', category: 'food', startTime: '~12:30', address: '一幻拉麵 (國內線航廈)', note: '推薦濃厚蝦湯頭搭配粗麵。', hours: '9:00-21:00', price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
+                    { id: 705, name: '機場購物/候機', category: 'shopping', startTime: '~13:30', address: '新千歲機場', note: '國內線航廈伴手禮店、多啦A夢樂園、Royce\' Chocolate World。', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
+                    { id: 706, name: '新千歲機場起飛 (CI0131)', category: 'flight', startTime: '14:30', address: '桃園國際機場 (TPE)', note: '預計 18:15 抵達桃園', hours: null, price: null, transportType: 'flight', travelTime: '3h45m', isNoteExpanded: false },
+                ],
+                // Day 9: 30/05/2026
+                [
+                    { id: 701, name: '早餐 (飯店/札幌車站周邊)', category: 'food', startTime: '08:00', address: '札幌車站周邊', note: '享用早餐', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
+                    { id: 702, name: '前往新千歲機場 (JR/巴士)', category: 'transport', startTime: '09:30', address: '新千歲機場', note: '搭乘 JR 或機場巴士，預計 11:30 報到。', hours: null, price: null, transportType: 'public', travelTime: '40m-1h', isNoteExpanded: false },
+                    { id: 703, name: '機場報到/托運行李', category: 'flight', startTime: '11:30', address: '新千歲機場 (CTS)', note: '預計 11:30 報到', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
+                    { id: 704, name: '午餐 (一幻拉麵)', category: 'food', startTime: '~12:30', address: '一幻拉麵 (國內線航廈)', note: '推薦濃厚蝦湯頭搭配粗麵。', hours: '9:00-21:00', price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
+                    { id: 705, name: '機場購物/候機', category: 'shopping', startTime: '~13:30', address: '新千歲機場', note: '國內線航廈伴手禮店、多啦A夢樂園、Royce\' Chocolate World。', hours: null, price: null, transportType: 'walk', travelTime: '0m', isNoteExpanded: false },
+                    { id: 706, name: '新千歲機場起飛 (CI0131)', category: 'flight', startTime: '14:30', address: '桃園國際機場 (TPE)', note: '預計 18:15 抵達桃園', hours: null, price: null, transportType: 'flight', travelTime: '3h45m', isNoteExpanded: false },
+                ],
+                // Day 10: 31/05/2026
                 [
                     { id: 701, name: '早餐 (飯店/札幌車站周邊)', category: 'food', startTime: '08:00', address: '札幌車站周邊', note: '享用早餐', hours: null, price: null, transportType: 'walk', travelTime: '10m', isNoteExpanded: false },
                     { id: 702, name: '前往新千歲機場 (JR/巴士)', category: 'transport', startTime: '09:30', address: '新千歲機場', note: '搭乘 JR 或機場巴士，預計 11:30 報到。', hours: null, price: null, transportType: 'public', travelTime: '40m-1h', isNoteExpanded: false },
