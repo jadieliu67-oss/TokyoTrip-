@@ -226,7 +226,7 @@
             </button>
 
             <button @click="currentTab = 'translate'" title="翻譯" 
-                    :class="{'active': currentTab === 'expenses'}" 
+                    :class="{'active': currentTab === 'translate'}" 
                     class="tab-button">
                 <i class="fa-solid fa-language"></i>
             </button>
@@ -243,7 +243,7 @@
                      @click="selectedDateIndex = index"
                      class="snap-center flex-shrink-0 w-[58px] h-[68px] rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300 border-2 shadow-sm"
                      :class="selectedDateIndex === index ?
-'bg-sea-blue text-white border-sea-blue shadow-lg scale-105' : 'bg-deep-sea/70 text-slate-400 border-white hover:bg-sea-blue/20'">
+'bg-sea-blue text-white border-sea-blue shadow-lg scale-105' : 'bg-deep-sea text-white border-deep-sea hover:bg-sea-blue/20'">
                     
                     <span class="text-sm font-bold uppercase tracking-wider">{{ day.weekday }}</span> 
                     <span class="text-xs font-medium opacity-70">{{ day.date }}</span> 
@@ -423,18 +423,18 @@ text-cyan-200 block mb-1 uppercase tracking-wider">JPY (日幣)</label>
                         <span class="text-slate-500">公司</span>
                         <span class="font-bold text-slate-700">Nippon Rent a Car</span>
                     </div>
-                    <div class="flex justify-between">
+                    <div class="flex justify-between items-center">
                         <span class="text-slate-500">取車點</span>
                         <span class="font-bold text-slate-700 text-right">伊東站前店</span>
-                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openMap('Nippon Rent-a-car Ito')"><i class="fa-solid fa-location-arrow"></i> 導航</span>
+                        <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openMap('ニッポンレンタカー伊東駅前営業所')"><i class="fa-solid fa-location-arrow"></i> 導航</span>
                     </div>
-                    <div>
+                    <div class="flex justify-between items-center">
                         <span class="text-slate-500">還車點</span>
                         <span class="font-bold text-slate-700 text-right">御殿場店</span>
                         <span class="text-xs text-gray-500 cursor-pointer text-sea-blue" @click="openMap('Nippon Rent-a-car Gotemba')"><i class="fa-solid fa-location-arrow"></i> 導航</span>
                     </div>
 
-                    <div class="flex justify-between">
+                    <div class="flex justify-between items-center">
                         <span class="text-slate-500">期間</span>
                         <span class="font-bold text-slate-700">25/5 10:00 - 28/5 18:00</span>
                     </div>
