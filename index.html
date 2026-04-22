@@ -457,7 +457,7 @@ hover:text-white transition-all">
         
         <div v-if="currentTab === 'shopping'" class="animate-fade-in">
             <div class="grid grid-cols-2 gap-4">
-                <div v-for="(item, idx) in shoppingList" :key="idx" class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm mb-3">
+                <div v-for="(item, idx) in shoppingList" :key="idx" class="bg-white rounded-2xl p-3 card-shadow relative group">
                     <div class="aspect-square bg-slate-50 rounded-xl mb-3 overflow-hidden relative border border-slate-100">
                         <img v-if="item.image" :src="item.image" class="w-full h-full object-cover">
                         <div v-else class="w-full h-full flex items-center justify-center text-slate-300">
