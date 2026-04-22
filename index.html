@@ -463,6 +463,22 @@ hover:text-white transition-all">
                         <div v-else class="w-full h-full flex items-center justify-center text-slate-300">
                             <i class="fa-solid fa-bag-shopping text-3xl"></i>
                         </div>
+                    <div class="flex items-center space-x-3">
+                        <button @click="togglePurchased(item)" class="text-xl focus:outline-none transition-colors">
+                            <i class="fa-regular fa-square text-slate-300" v-if="!item.purchased"></i>
+                            <i class="fa-solid fa-square-check text-sea-blue" v-else></i>
+                        </button> 
+                        
+                        <span class="font-medium text-slate-700" :class="{ 'line-through text-slate-400': item.purchased }">
+                            {{ item.name }}
+                        </span>
+                    </div>
+                        
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm font-bold text-accent-orange" :class="{ 'text-slate-400': item.purchased }">
+                            ¥{{ item.price }} 
+                        </span>
+                        
                         <button @click="removeShoppingItem(idx)" class="absolute top-2 right-2 bg-black/60 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -836,17 +852,16 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             
             // 購物清單 (範例資料)
             const shoppingList = ref([
-                { name: '六花亭 奶油葡萄乾夾心餅乾', image: 'https://via.placeholder.com/100/f0f9ff/005e8a?text=Rokkatei' },
-                { name: 'LeTAO 雙層起司蛋糕', image: 'https://via.placeholder.com/100/f0f9ff/005e8a?text=LeTAO' },
-                { name: '薯條三兄弟', image: 'https://via.placeholder.com/100/f0f9ff/005e8a?text=JagaPockle' },
+                { name: 'LIPOPEEL Serum', price: null, image: 'https://yui-japan.com/cdn/shop/files/2_146440d3-167c-42ff-a85e-331b57c25053.png?v=1751708672&width=1946' },
             ]);
 
             // 花費紀錄 (範例資料)
             const expenses = ref([
-                { name: '機票費用', amount: 35000, category: 'flight', date: '2026-01-15', payment: 'card' },
-                { name: '札幌湯咖哩', amount: 4500, category: 'food', date: '2026-03-06', payment: 'cash' },
-                { name: '小樽水族館門票', amount: 3600, category: 'ticket', date: '2026-03-07', payment: 'card' },
-                { name: '登別溫泉飯店', amount: 80000, category: 'stay', date: '2026-03-09', payment: 'card' },
+                { name: 'Hotel Plumm', amount: 35071, category: 'stay', date: '2026-05-19', payment: 'card' },
+                { name: '格蘭度假優雅熱海酒店', amount: 29434, category: 'stay', date: '2026-05-15', payment: 'card' },
+                { name: '太陽城王子大飯店', amount: 39296, category: 'stay', date: '2026-05-28', payment: 'card' },
+                { name: '望水', amount: 81840, category: 'stay', date: '2026-04-10', payment: 'card' },
+                { name: 'Kimono (Jadie)', amount: 6600, category: 'ticket', date: '2026-04-15', payment: 'card' },
             ]);
 
             // --- 狀態控制 ---
@@ -1055,7 +1070,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
 
             // --- 購物清單管理 ---
             const resetShoppingForm = () => {
-                newShoppingItem.value = { name: '', image: null };
+                newShoppingItem.value = { name: '', price: null, image: null };
             };
             
             const handleImageUpload = (event) => {
@@ -1074,7 +1089,13 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     alert('商品名稱不能為空！');
                     return;
                 }
-                shoppingList.value.push({ ...newShoppingItem.value });
+                shoppingList.value.push({ 
+                    name: newShoppingItem.value.name,
+                    price: newShoppingItem.value.price || 0,
+                    image: newShoppingItem.value.image,
+                    // 加上這一行，預設狀態為「未購買」
+                    purchased: false 
+                });
                 showShoppingModal.value = false;
                 resetShoppingForm();
             };
@@ -1083,6 +1104,9 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                 shoppingList.value.splice(index, 1);
             };
 
+            const togglePurchased = (item) => {
+                item.purchased = !item.purchased;
+            };
             // --- 花費管理 ---
             const resetExpenseForm = () => {
                 newExpense.value = { name: '', amount: null, category: 'food', date: new Date().toISOString().substring(0, 10), payment: 'cash' };
@@ -1130,7 +1154,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                 getCategoryColor, getCategoryIcon, getCategoryLabel, getWeatherIcon, getTransportIcon, getWeatherDescription,
                 showShoppingModal, showExpenseModal, showItineraryModal, isEditMode,
                 newShoppingItem, newExpense, newItinerary,
-                handleAddClick, handleImageUpload, addShoppingItem, removeShoppingItem,
+                handleAddClick, handleImageUpload, addShoppingItem, removeShoppingItem, togglePurchased,
                 addExpense, removeExpense, editItem, saveItineraryItem,
                 removeItineraryItem, 
                 moveItineraryUp, moveItineraryDown, 
