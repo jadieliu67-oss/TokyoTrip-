@@ -463,22 +463,17 @@ hover:text-white transition-all">
                         <div v-else class="w-full h-full flex items-center justify-center text-slate-300">
                             <i class="fa-solid fa-bag-shopping text-3xl"></i>
                         </div>
-                    <div class="flex items-center space-x-3">
-                        <button @click="togglePurchased(item)" class="text-xl focus:outline-none transition-colors">
-                            <i class="fa-regular fa-square text-slate-300" v-if="!item.purchased"></i>
-                            <i class="fa-solid fa-square-check text-sea-blue" v-else></i>
-                        </button> 
+                        <div class="flex items-center space-x-3">
+                            <button @click="togglePurchased(item)" class="text-xl focus:outline-none transition-colors">
+                                <i class="fa-regular fa-square text-slate-300" v-if="!item.purchased"></i>
+                                <i class="fa-solid fa-square-check text-sea-blue" v-else></i>
+                            </button> 
                         
                         <span class="font-medium text-slate-700" :class="{ 'line-through text-slate-400': item.purchased }">
                             {{ item.name }}
                         </span>
-                    </div>
-                        
-                    <div class="flex items-center space-x-3">
-                        <span class="text-sm font-bold text-accent-orange" :class="{ 'text-slate-400': item.purchased }">
-                            ¥{{ item.price }} 
-                        </span>
-                        
+                        </div>
+                                           
                         <button @click="removeShoppingItem(idx)" class="absolute top-2 right-2 bg-black/60 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -852,7 +847,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             
             // 購物清單 (範例資料)
             const shoppingList = ref([
-                { name: 'LIPOPEEL Serum', price: null, image: 'https://yui-japan.com/cdn/shop/files/2_146440d3-167c-42ff-a85e-331b57c25053.png?v=1751708672&width=1946' },
+                { name: 'LIPOPEEL Serum', image: 'https://yui-japan.com/cdn/shop/files/2_146440d3-167c-42ff-a85e-331b57c25053.png?v=1751708672&width=1946' },
             ]);
 
             // 花費紀錄 (範例資料)
@@ -1070,7 +1065,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
 
             // --- 購物清單管理 ---
             const resetShoppingForm = () => {
-                newShoppingItem.value = { name: '', price: null, image: null };
+                newShoppingItem.value = { name: '', image: null };
             };
             
             const handleImageUpload = (event) => {
@@ -1091,7 +1086,6 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                 }
                 shoppingList.value.push({ 
                     name: newShoppingItem.value.name,
-                    price: newShoppingItem.value.price || 0,
                     image: newShoppingItem.value.image,
                     // 加上這一行，預設狀態為「未購買」
                     purchased: false 
