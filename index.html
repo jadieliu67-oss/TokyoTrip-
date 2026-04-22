@@ -463,24 +463,22 @@ hover:text-white transition-all">
                         <div v-else class="w-full h-full flex items-center justify-center text-slate-300">
                             <i class="fa-solid fa-bag-shopping text-3xl"></i>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <button @click="togglePurchased(item)" class="text-xl focus:outline-none transition-colors">
-                                <i class="fa-regular fa-square text-slate-300" v-if="!item.purchased"></i>
-                                <i class="fa-solid fa-square-check text-sea-blue" v-else></i>
-                            </button> 
-                        
-                        <span class="font-medium text-slate-700" :class="{ 'line-through text-slate-400': item.purchased }">
-                            {{ item.name }}
-                        </span>
-                        </div>
-                                           
+
                         <button @click="removeShoppingItem(idx)" class="absolute top-2 right-2 bg-black/60 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
-                    <p class="font-bold text-sm text-slate-800 truncate px-1">{{ item.name }}</p>
-                </div>
-                
+                    <div class="flex items-center space-x-2 px-1">
+                        <button @click="togglePurchased(item)" class="text-lg focus:outline-none transition-colors shrink-0">
+                            <i class="fa-regular fa-square text-slate-300" v-if="!item.purchased"></i>
+                            <i class="fa-solid fa-square-check text-sea-blue" v-else></i>
+                        </button> 
+                        
+                        <span class="font-bold text-sm truncate" :class="item.purchased ? 'line-through text-slate-400' : 'text-slate-800'">
+                            {{ item.name }}
+                            </span>
+                    </div>
+                </div>    
                 <div v-if="shoppingList.length % 2 !== 0" class="h-0 invisible"></div>
                 
                 <div v-if="shoppingList.length === 0" class="col-span-2 text-center py-16 text-slate-300">
