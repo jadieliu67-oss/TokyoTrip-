@@ -252,7 +252,7 @@
 
             <div v-if="weatherData[selectedDateIndex]" class="mb-4 bg-snow-white border border-sea-blue rounded-2xl p-4 flex justify-between items-center shadow-md">
                 <div class="flex items-start text-deep-sea space-x-4">
-                    <i :class="getWeatherIcon(weatherData[selectedDateIndex].condition)" class="text-5xl text-blue-500"></i>
+                    <i :class="getWeatherIcon(weatherData[selectedDateIndex].condition)" class="text-5xl text-amber-400"></i>
                     
                     <div class="pt-1">
                         <span class="text-3xl font-extrabold leading-none">{{ weatherData[selectedDateIndex].temp.split('/')[0] }}°</span>
