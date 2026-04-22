@@ -457,7 +457,7 @@ hover:text-white transition-all">
         
         <div v-if="currentTab === 'shopping'" class="animate-fade-in">
             <div class="grid grid-cols-2 gap-4">
-                <div v-for="(item, idx) in shoppingList" :key="idx" class="bg-white rounded-2xl p-3 card-shadow relative group">
+                <div v-for="(item, idx) in shoppingList" :key="idx" class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm mb-3">
                     <div class="aspect-square bg-slate-50 rounded-xl mb-3 overflow-hidden relative border border-slate-100">
                         <img v-if="item.image" :src="item.image" class="w-full h-full object-cover">
                         <div v-else class="w-full h-full flex items-center justify-center text-slate-300">
@@ -703,16 +703,16 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             // --- 資料定義：已根據使用者最新行程全部更新 ---
             
             const dates = ref([
-                { date: '22/5', weekday: '五', hasCar: false, tollFee: 0 },
-                { date: '23/5', weekday: '六', hasCar: false, tollFee: 0 }, // 租車日開始
-                { date: '24/5', weekday: '日', hasCar: false, tollFee: 0 },
-                { date: '25/5', weekday: '一', hasCar: true, tollFee: 0 },
-                { date: '26/5', weekday: '二', hasCar: true, tollFee: 0 },
-                { date: '27/5', weekday: '三', hasCar: true, tollFee: 0 }, 
-                { date: '28/5', weekday: '四', hasCar: true, tollFee: 0 }, // 還車
-                { date: '29/5', weekday: '五', hasCar: false, tollFee: 0 },
-                { date: '30/5', weekday: '六', hasCar: false, tollFee: 0 },
-                { date: '31/5', weekday: '日', hasCar: false, tollFee: 0 },
+                { date: '22/5', weekday: 'FRI', hasCar: false, tollFee: 0 },
+                { date: '23/5', weekday: 'SAT', hasCar: false, tollFee: 0 }, // 租車日開始
+                { date: '24/5', weekday: 'SUN', hasCar: false, tollFee: 0 },
+                { date: '25/5', weekday: 'MON', hasCar: true, tollFee: 0 },
+                { date: '26/5', weekday: 'TUE', hasCar: true, tollFee: 0 },
+                { date: '27/5', weekday: 'WED', hasCar: true, tollFee: 0 }, 
+                { date: '28/5', weekday: 'THU', hasCar: true, tollFee: 0 }, // 還車
+                { date: '29/5', weekday: 'FRI', hasCar: false, tollFee: 0 },
+                { date: '30/5', weekday: 'SAT', hasCar: false, tollFee: 0 },
+                { date: '31/5', weekday: 'SUN', hasCar: false, tollFee: 0 },
             ]);
 
             const hotels = ref([
