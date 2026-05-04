@@ -672,10 +672,21 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
 </div> 
 
 <script>
-    const { createApp, ref, computed, onMounted } = Vue
+    const { createApp, ref, computed, onMounted, watch} = Vue
 
     createApp({
         setup() {
+            const loadData = (key, defaultData) => {
+                const saved = localStorage.getItem(key);
+                if (saved) {
+                    try {
+                        return JSON.parse(saved);
+                    } catch (e) {
+                        console.error('讀取紀錄失敗', e);
+                    }
+                }
+                return defaultData;
+            };
             // 匯率基準
             const EXCHANGE_RATE = 0.0495;
 
@@ -722,7 +733,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             ]);
 
             // 使用者的完整行程資料 (已根據最新的排程更新)
-            const itineraryData = ref([
+            const defaultItinerary = [
                 // Day 1: 22/05/2026
                 [
                     { id: 101, name: '香港機場報到', category: 'flight', startTime: '08:00', address: '香港國際機場 (HKG)', note: '香港快運 UO870 10:35起飛', hours: null, price: null, transportType: 'flight', travelTime: null, isNoteExpanded: false },
@@ -829,6 +840,14 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                 ],
             ]);
 
+            // 宣告 itineraryData，優先讀取儲存空間，沒有才用 defaultItinerary
+            const itineraryData = ref(loadData('tokyo_itinerary', defaultItinerary));
+
+            // 加入自動存檔監聽器 (只要行程有變，立刻存檔)
+            watch(itineraryData, (newVal) => {
+                localStorage.setItem('tokyo_itinerary', JSON.stringify(newVal));
+            }, { deep: true });
+
             // 預設天氣資訊
             const weatherData = ref([
                 { condition: 'sunny', temp: '25/16', feel: '28' },
@@ -844,18 +863,29 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             ]);
             
             // 購物清單 (範例資料)
-            const shoppingList = ref([
+            const defaultShopping = [
                 { name: 'LIPOPEEL Serum', image: 'https://yui-japan.com/cdn/shop/files/2_146440d3-167c-42ff-a85e-331b57c25053.png?v=1751708672&width=1946', purchased: false},
             ]);
+            const shoppingList = ref(loadData('tokyo_shopping', defaultShopping));
+
+            watch(shoppingList, (newVal) => {
+                localStorage.setItem('tokyo_shopping', JSON.stringify(newVal));
+            }, { deep: true });
 
             // 花費紀錄 (範例資料)
-            const expenses = ref([
+            const defaultExpenses = [
                 { name: 'Hotel Plumm', amount: 35071, category: 'stay', date: '2026-05-19', payment: 'card' },
                 { name: '格蘭度假優雅熱海酒店', amount: 29434, category: 'stay', date: '2026-05-15', payment: 'card' },
                 { name: '太陽城王子大飯店', amount: 39296, category: 'stay', date: '2026-05-28', payment: 'card' },
                 { name: '望水', amount: 81840, category: 'stay', date: '2026-04-10', payment: 'card' },
                 { name: 'Kimono (Jadie)', amount: 6600, category: 'ticket', date: '2026-04-15', payment: 'card' },
             ]);
+
+            const expenses = ref(loadData('tokyo_expenses', defaultExpenses));
+            
+            watch(expenses, (newVal) => {
+                localStorage.setItem('tokyo_expenses', JSON.stringify(newVal));
+            }, { deep: true });
 
             // --- 狀態控制 ---
             const selectedDateIndex = ref(0);
