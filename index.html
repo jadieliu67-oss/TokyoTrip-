@@ -872,7 +872,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             ]);
             
             // 購物清單 (範例資料)
-            const defaultShopping = [
+            const defaultShopping = ([
                 { name: 'LIPOPEEL Serum', image: 'https://yui-japan.com/cdn/shop/files/2_146440d3-167c-42ff-a85e-331b57c25053.png?v=1751708672&width=1946', purchased: false},
             ]);
             const shoppingList = ref(loadData('tokyo_shopping', defaultShopping));
@@ -882,7 +882,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
             }, { deep: true });
 
             // 花費紀錄 (範例資料)
-            const defaultExpenses = [
+            const defaultExpenses = ([
                 { name: 'Hotel Plumm', amount: 35071, category: 'stay', date: '2026-05-19', payment: 'card' },
                 { name: '格蘭度假優雅熱海酒店', amount: 29434, category: 'stay', date: '2026-05-15', payment: 'card' },
                 { name: '太陽城王子大飯店', amount: 39296, category: 'stay', date: '2026-05-28', payment: 'card' },
