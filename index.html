@@ -673,12 +673,9 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
 
 <script>
     const { createApp, ref, computed, onMounted, watch} = Vue
-        
-    import { createApp, ref, onMounted } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
-    // 在你的其他邏輯附近加上：
+
     onMounted(() => {
   // 強制重置一次（如果你改了 ID 網頁還是壞的，就用這招）
-        
         // localStorage.removeItem('itineraryData');
         const savedData = localStorage.getItem('itineraryData');
         if (savedData) {
