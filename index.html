@@ -7,6 +7,8 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -672,30 +674,55 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
 </div> 
 
 <script>
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "firebase/app";
+
+// Firebase 配置
+    const firebaseConfig = {
+        apiKey: "AIzaSyD3jzd5Q3c_7tBhMlqVNyIiPJLLTtiru4o", 
+        authDomain: "tokyo-trip-d8dea.firebaseapp.com",
+        databaseURL: "https://tokyo-trip-d8dea-default-rtdb.firebaseio.com/", // 這裡貼上你截圖中的網址
+        projectId: "tokyo-trip-d8dea",
+        storageBucket: "tokyo-trip-d8dea.firebasestorage.app",
+        messagingSenderId: "105588985165",
+        appId: "1:105588985165:web:8b13c147ad3e712c85fb04"
+    };
+// Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+// 初始化 Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    
     const { createApp, ref, computed, onMounted, watch} = Vue
 
-    onMounted(() => {
-  // 強制重置一次（如果你改了 ID 網頁還是壞的，就用這招）
-        // localStorage.removeItem('itineraryData');
-        const savedData = localStorage.getItem('itineraryData');
-        if (savedData) {
-            itinerary.value = JSON.parse(savedData);
-        }
-    });
-
-    createApp({
+        createApp({
         setup() {
-            const loadData = (key, defaultData) => {
-                const saved = localStorage.getItem(key);
-                if (saved) {
-                    try {
-                        return JSON.parse(saved);
-                    } catch (e) {
-                        console.error('讀取紀錄失敗', e);
+            c // 定義資料 (先給空陣列)
+            const itineraryData = ref([]);
+
+    // 當網頁開啟時 (Mounted)，從雲端抓資料
+            onMounted(() => {
+                const itineraryRef = db.ref('itinerary');
+        
+        // 監聽雲端資料變動
+                itineraryRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                // 如果雲端有資料，直接更新畫面
+                        itineraryData.value = data;
+                    } else {
+                // 如果雲端是空的 (第一次使用)，就把預設資料傳上去
+                        itineraryRef.set(defaultItinerary);
                     }
-                }
-                return defaultData;
-            };
+                });
+            });
+
+            // 當資料有變動時，自動存回雲端 (取代 saveData)
+            watch(itineraryData, (newVal) => {
+                db.ref('itinerary').set(JSON.parse(JSON.stringify(newVal)));
+            }, { deep: true });
+
             // 匯率基準
             const EXCHANGE_RATE = 0.0495;
 
