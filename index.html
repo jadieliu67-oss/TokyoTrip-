@@ -869,10 +869,7 @@ rounded-xl p-3 text-sm text-slate-600 outline-none">
                     { id: 1002, name: '回到香港', category: 'flight', startTime: '04:40', address: '香港國際機場 (HKG)', note: null, hours: null, price: null, transportType: 'flight', travelTime: '3h30m', isNoteExpanded: false },
                 ],
             ]);
-
-            // 宣告 itineraryData，優先讀取儲存空間，沒有才用 defaultItinerary
-            const itineraryData = ref(loadData('tokyo_itinerary', defaultItinerary));
-
+            
             // 加入自動存檔監聽器 (只要行程有變，立刻存檔)
             watch(itineraryData, (newVal) => {
                 localStorage.setItem('tokyo_itinerary', JSON.stringify(newVal));
